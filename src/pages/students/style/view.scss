@@ -4,6 +4,31 @@
   position: fixed;
   // height: 100%;
   
+
+  
+  .detailItem {
+    display: flex;
+    flex-basis: 50%; /* Two items per row, adjust as needed */
+    margin-bottom: 10px; /* Adjust margin between items */
+  }
+  
+  .itemKey {
+    width: 120px; /* Adjust key width */
+    font-weight: bold; /* Make the key bold */
+    margin-right: 5px; /* Adjust space between key and value */
+  }
+
+  .col-action {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .col-action button {
+    font-size: 12px;
+    box-shadow: none;
+  }
+  
+  
   .singleContainer {
     overflow-y: scroll;
     height: 100vh;

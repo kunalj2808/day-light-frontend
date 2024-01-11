@@ -31,13 +31,6 @@ import ava2 from "../assets/images/logo-atlassian.svg";
 import ava3 from "../assets/images/logo-slack.svg";
 import ava5 from "../assets/images/logo-jira.svg";
 import ava6 from "../assets/images/logo-invision.svg";
-import face from "../assets/images/face-1.jpg";
-import face2 from "../assets/images/face-2.jpg";
-import face3 from "../assets/images/face-3.jpg";
-import face4 from "../assets/images/face-4.jpg";
-import face5 from "../assets/images/face-5.jpeg";
-import face6 from "../assets/images/face-6.jpeg";
-import pencil from "../assets/images/pencil.svg";
 import {
   ToTopOutlined,
   MenuUnfoldOutlined,
@@ -336,43 +329,43 @@ function Home() {
 // table code start
 const columns = [
   {
-    title: "Name",
+    title: <h3 className="column-header">NAME</h3>,
     dataIndex: "name",
     key: "name",
-    width: "32%",
   },
   {
-    title: "Standard",
+    title: <h3 className="column-header">STANDARD</h3>,
     dataIndex: "Standard",
     key: "Standard",
   },
-
   {
-    title: "Medium",
+    title: <h3 className="column-header">MEDIUM</h3>,
     key: "Medium",
     dataIndex: "Medium",
   },
   {
-    title: "Parent Name	",
+    title: <h3 className="column-header">PARENTS NAME</h3>,
     key: "parent",
     dataIndex: "parent",
   },
   {
-    title: "Parent Phone",
+    title: <h3 className="column-header">PARENTS PHONE</h3>,
     key: "parentphone",
     dataIndex: "parentphone",
   },
   {
-    title: "Attendance	",
-    key: "attendence",
-    dataIndex: "attendence",
+    title: <h3 className="column-header">ATTENDENCE</h3>,
+    key: "attendance",
+    dataIndex: "attendance",
   },
   {
-    title: "Percentage	",
+    title: <h3 className="column-header">PERCENTAGE</h3>,
     key: "Percentage",
     dataIndex: "Percentage",
   },
 ];
+
+
 
 const Topdatas = topData.map((data, index) => ({
   key: index.toString(),
@@ -380,7 +373,7 @@ const Topdatas = topData.map((data, index) => ({
     <>
      
         <div className="avatar-info">
-          <Title level={5}>{data.first_name}&nbsp;{data.last_name}</Title>
+        <b><span >{data.first_name}&nbsp;{data.last_name}</span></b>
         </div>
     </>
   ),
@@ -435,8 +428,8 @@ const bottomdatas = bottomData.map((data, index) => ({
   name: (
     <>
      
-        <div className="avatar-info">
-          <Title level={5}>{data.first_name}&nbsp;{data.last_name}</Title>
+     <div className="avatar-info">
+          <b><span >{data.first_name}&nbsp;{data.last_name}</span></b>
         </div>
     </>
   ),
@@ -602,18 +595,18 @@ const bottomdatas = bottomData.map((data, index) => ({
               md={12}
               lg={6}
               xl={6}
-              className="mb-24"
+              className="mb-24" 
             >
-              <Card bordered={false} className="criclebox ">
-                <div className="number">
-                  <Row align="middle" gutter={[24, 0]}>
-                    <Col xs={18}>
+              <Card bordered={false} className="criclebox" style={{ padding: 0, height: '90px',  marginTop:-10}}>
+                <div className="number" style={{marginTop:-12}}>
+                  <Row align="middle" gutter={[, 0]}>
+                    <Col xs={19}>
                       <span>{c.today}</span>
-                      <Title level={3}>
+                      <Title level={2}>
                         {c.title} <small className={c.bnb}>{c.persent}</small>
                       </Title>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={3}>
                       <div className="icon-box">{c.icon}</div>
                     </Col>
                   </Row>
@@ -628,7 +621,7 @@ const bottomdatas = bottomData.map((data, index) => ({
         <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
   <Card bordered={false} className="criclebox h-full">
     {studentSessions.length > 0 && (
-      <LineChart data={studentSessions} title="This Session (Attendance)" aspect={2 / 1} />
+      <LineChart data={studentSessions} title="This Session (Attendance)" />
     )}
   </Card>
 </Col>
@@ -647,7 +640,7 @@ const bottomdatas = bottomData.map((data, index) => ({
               }
             >
               <div className="table-responsive">
-                <Table
+                <Table style={{textAlign:"left" }}
                   columns={columns}
                   dataSource={Topdatas}
                   pagination={false}

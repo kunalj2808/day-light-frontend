@@ -1,161 +1,230 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
+import { DataGrid,gridClasses } from "@mui/x-data-grid";
+import { Box, TextField, MenuItem , IconButton, useTheme,Button} from '@mui/material';
+import InputBase from "@mui/material/InputBase";
+import SearchIcon from "@mui/icons-material/Search";
+import { tokens } from '../../theme';
+import { alpha, styled } from '@mui/material/styles';
+import {
+  gridPageCountSelector,
+  gridPageSelector,
+  useGridApiContext,
+  useGridSelector,
+} from '@mui/x-data-grid';
+//import { useDemoData } from '@mui/x-data-grid-generator';
+import { Theme } from '@mui/material/styles';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+
+
+
 import { useState,useEffect,useRef } from "react";
 
-import {
-  Card,
-  Col,
-  Row,
-  Typography,
-  Tooltip,
-  Progress,
-  Upload,
-  Avatar,
-  message,
-  Button,
-  Timeline,
-  Radio,
-  Table
-} from "antd";
-
-import {
-  ToTopOutlined,
-  MenuUnfoldOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
-import Paragraph from "antd/lib/typography/Paragraph";
-
-// import Echart from "../components/chart/EChart";
-// import LineChart from "../components/chart/LineChart";
 import { useAuth } from "../../providers/AuthProvider";
-import AuthAxios from "../../config/AuthAxios";
-function Home() {
-  const { Title, Text } = Typography;  
+import AuthAxios from '../../config/AuthAxios';
+
+const ListParents = () => {
+
   const dataRef = useRef(null)
   const [data, setData] = useState([]);
-  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
+  const [dataRow , setDataRow]= useState([]);
+  const [searchText, setSearchText] = useState('');
 
-  const [reverse, setReverse] = useState(false);  
+  const [selectedValue, setSelectedValue] = useState([]);
 
-  const [topData, setTopData] = useState([]);
-  const [bottomData, setBottomData] = useState([]);
-  const [totalStudents, setTotalStudents] = useState(0);
-  const [totalStaffs, setTotalStaffs] = useState(0);
-  
-    const [todayStudent, setTodayStudent] = useState(0);
-    const [todayStaff, setTodayStaff] = useState(0);
-    const [arrayCount,setArrayCount] = useState([]);
+  const [classValue, setClassValue] = useState(null);
+  const [mediumValue, setMediumValue] = useState(null);
 
-  const [staffOverall, setStaffOverall] = useState(null);
-  const [studentOverall, setStudentOverall] = useState(null);
-
-  const [staffSessions, setStaffSession] = useState(null);
-  const [studentSessions, setStudentSession] = useState([]);
-
-
-  const [studentLimit, setStudentLimit] = useState(5);
-
-  const { userToken } = useAuth();
+  const {userToken} = useAuth();
   const api = AuthAxios(userToken);
-  const Topdatas = data.map((data, index) => ({
-    key: index.toString(),
-    name: (
-      <>
-       
-          <div className="avatar-info">
-            <Title level={5}>{data.name}</Title>
-          </div>
-      </>
-    ),
+  const [loading, setLoading] = useState(true);
+
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 1,
+      cellClassName: 'name-column--cell',
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone Number',
+      flex: 1,
+      cellClassName: 'name-column--cell',
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      flex: 1,
+      cellClassName: 'name-column--cell',
+    },
+    
+   
+   
+  ];
+
+
+  useEffect(() => {
+    api.get('parents')
+      .then((res) => {
+        const data = res.data;
+        const currentData = data.map((parent, index) => ({
+          id: parent.id,
+          name: parent.name,
+          phone: parent.phone,
+          email: parent.email,
+        }));
+
+        setDataRow(currentData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
   
-    phone: (
-      <>
-        <div className="ant-employed">
-            <span>{data.phone}</span>
-          </div>
-      </>
-    ),
-    email: (
-      <>
-        <div className="ant-employed">
-          <span>{data.email}</span>
-        </div>
-      </>
-    ),
   
+  const handleSearch = async event => {
+    setLoading(true);
+  
+    const searchTerm = event.target.value.toLowerCase();
+    setSearchText(searchTerm);
+  
+    const params = {};
+    if (searchTerm.length > 0) {
+      params.searchText = searchTerm; // Use searchTerm instead of searchText
+    }
+  
+    api.get('parents', { params })
+      .then((res) => {
+        const data = res.data;
+        setData(data);
+  
+        const currentData = data.map((parent, index) => ({
+          ids: parent.id,
+          id: index + 1,
+          name: parent.name,
+          phone: parent.phone,
+          email: parent.email,
+        }));
+  
+        setLoading(false);
+  
+        // Use setTimeout if you need a delay before setting the state
+        setTimeout(() => {
+          setDataRow(currentData);
+          console.log("dataRow after mapping and setting state:", currentData);
+        }, 100); // Adjust the delay time as needed
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  
+  const ODD_OPACITY = 0.2;
+
+  const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+    [`& .${gridClasses.row}.even`]: {
+      backgroundColor: "white",
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+        '@media (hover: none)': {
+          backgroundColor: 'transparent',
+        },
+      },
+      '&.Mui-selected': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY + theme.palette.action.selectedOpacity,
+        ),
+        '&:hover, &.Mui-hovered': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY +
+              theme.palette.action.selectedOpacity +
+              theme.palette.action.hoverOpacity,
+          ),
+          // Reset on touch devices, it doesn't add specificity
+          '@media (hover: none)': {
+            backgroundColor: alpha(
+              theme.palette.primary.main,
+              ODD_OPACITY + theme.palette.action.selectedOpacity,
+            ),
+          },
+        },
+      },
+    },
   }));
-// table code start
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    width: "32%",
-  },
-  {
-    title: "Phone Number",
-    dataIndex: "phone",
-    key: "phone",
-  },
 
-  {
-    title: "Email ",
-    key: "email",
-    dataIndex: "email",
-  },
- 
-];
-
-
-
-
-// Now 'datas' contains the transformed data based on 'topData' with keys using the map function.
-
-useEffect(() => {
-  api.get('parents').then((res) => {
-   let data = res.data;
-   setData(data)
-}).catch((err) => {
-   console.error(err)
-})
-}, []);
-  
-return (
-  <>
-    <div className="tabled">
-      <Row gutter={[24, 0]}>
-        <Col xs="24" xl={24}>
-          <Card
-            bordered={false}
-            className="criclebox tablespace mb-48"
-            title="Parents"
-            
-          >
-            <br />
-            <div className="table-responsive">
-              <Table
-                columns={columns}
-                dataSource={data}
-                pagination={false}
-                className="ant-border-space"
+  return (
+    <div className="list">
+      <div className="listContainer">
+          <Box display="flex" alignItems="center" justifyContent="flex-start" mb={2}>
+            <Box sx={{ mr: 2 }} variant="outlined" backgroundColor={colors.primary[400]} borderRadius="3px">
+              <InputBase
+                sx={{ ml: 2, flex: 1 }}
+                placeholder="Search"
+                onChange={handleSearch}
+                style={{ width: '120px' }}
               />
-            </div>
-          </Card>
+              <IconButton type="button" sx={{ p: 1 }}>
+                <SearchIcon />
+              </IconButton>
+            </Box>
+          </Box>
 
-        </Col>
-      </Row>
+          <Box m="20px 0px 20px 0px"   sx={{
+          '& .MuiDataGrid-root': {
+            border: '4',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: '1',
+          },
+          
+          '& .name-column--cell': {
+            color: colors.primary[100],
+          },
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: "#1890ff",
+            borderBottom: '4',
+          },
+          '& .MuiDataGrid-virtualScroller': {
+            backgroundColor: colors.primary[400],
+          },
+          '& .MuiDataGrid-footerContainer': {
+            borderTop: '4',
+            backgroundColor: "",
+          },
+          '& .MuiCheckbox-root': {
+            color: `${colors.greenAccent[300]} !important`,
+          },
+          '& .MuiDataGrid-row': {
+            backgroundColor: colors.primary[400],
+            borderBottom: 'none',
+          },
+          '& .MuiDataGrid-row.odd': {
+            backgroundColor: "white",
+            borderBottom: 'none',
+          },
+          
+        }} height="600px">
+          <DataGrid
+            ref={dataRef}
+            theme={theme}
+            rows={dataRow}
+            columns={columns}
+            pageSize={5}
+            disableRowSelectionOnClick
+            loading={loading}
+          />
+        </Box>
+      </div>
     </div>
-  </>
-);
-}
+  );
+};
 
-export default Home;
+export default ListParents

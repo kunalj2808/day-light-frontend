@@ -292,29 +292,22 @@ function Header({
               Dashboard
             </Breadcrumb.Item>
           </Breadcrumb>
-          <div className="ant-page-header-heading">
-            <span
-              className="ant-page-header-heading-title"
-              style={{ textTransform: "capitalize" }}
-            >
-              {subName.replace("/", "")}
-            </span>
-          </div>
+        
         </Col>
         <Col span={24} md={18} className="header-control">
-          <Badge size="small" count={4}>
+          {/* <Badge size="small" count={4}>
             <Dropdown overlay={menu} trigger={["click"]}>
               <a
                 href="#pablo"
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                {bell}
-              </a>
-            </Dropdown>
-          </Badge>
-          <Button type="link" onClick={showDrawer}>
-            {logsetting}
+                {/* {bell} */}
+              {/* </a> */}
+            {/* </Dropdown> */}
+          {/* </Badge> */}         
+           <Button type="link" onClick={showDrawer}>
+            {/* {logsetting} */}
           </Button>
           <Button
             type="link"
@@ -436,11 +429,11 @@ function Header({
           <span className="btn-sign-in">Sign Out</span>
         </span>
         </a>
-          <Input
+          {/* <Input
             className="header-search"
             placeholder="Type here..."
             prefix={<SearchOutlined />}
-          />
+          /> */}
         </Col>
       </Row>
     </>

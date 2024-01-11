@@ -14,8 +14,7 @@ import {
 import "./style/create.scss";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import axios from "axios";
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import {  toast } from 'react-toastify';
 import { tokens } from "../../theme";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
@@ -93,7 +92,7 @@ const CreateStudentForm = () => {
             // The created user data will be available in the response object
             console.log("Upload Succesful:", response.data);
 
-            //toast("User created Succesfully!")
+            toast("User created Succesfully!")
             return response.data;
         } catch (error) {
             // Handle errors if the request fails
@@ -163,7 +162,7 @@ const CreateStudentForm = () => {
 
             // The created user data will be available in the response object
             console.log("User created:", response.data);
-            //toast("User created Succesfully!")
+            toast("User created Succesfully!")
             return response.data;
         } catch (error) {
             // Handle errors if the request fails
@@ -182,15 +181,15 @@ const CreateStudentForm = () => {
             // Handle the success case, e.g., show a success message
 
             refresh();
-            // toast.success('User created successfully !', {
-            //     position: toast.POSITION.TOP_RIGHT
-            // });
-            //toast("User created successfully:", createdUser);
+            toast.success('User created successfully !', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            toast("User created successfully:", createdUser);
             console.log("User created successfully:", createdUser);
         } catch (error) {
-            // toast.error('Error creating user ! \n' + error?.response?.data?.error, {
-            //     position: toast.POSITION.TOP_CENTER
-            //   });
+            toast.error('Error creating user ! \n' + error?.response?.data?.error, {
+                position: toast.POSITION.TOP_CENTER
+              });
               console.error("Error creating user:", error?.response?.data?.error);
         }
     };

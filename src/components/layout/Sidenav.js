@@ -162,13 +162,14 @@ function Sidenav({ color }) {
 
   return (
     <>
-      <div className="brand">
-        <img src={logo} alt="" />
-        <span>Muse Dashboard</span>
+      <div className="brand" style={{color:'black'}}>
+        <NavLink to='/dashboard'><img src={logo} alt="" />
+        <span>F. R. A. M. S.</span>
+        </NavLink>
       </div>
       <hr />
       <Menu theme="light" mode="inline">
-        <Menu.Item key="1">
+        {/* <Menu.Item key="1">
           <NavLink to="/dashboard">
             <span
               className="icon"
@@ -180,7 +181,7 @@ function Sidenav({ color }) {
             </span>
             <span className="label">Dashboard</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item className="menu-item-header" key="5">
            Students
         </Menu.Item>
@@ -223,7 +224,7 @@ function Sidenav({ color }) {
             <span className="label">Manage Leaves</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="5">
+        {/* <Menu.Item key="5">
           <NavLink to="/notification">
             <span
               className="icon"
@@ -235,7 +236,7 @@ function Sidenav({ color }) {
             </span>
             <span className="label">Notification</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item className="menu-item-header" key="5">
            Staffs
         </Menu.Item>
@@ -322,23 +323,7 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item> */}
       </Menu>
-      {/* <div className="aside-footer">
-        <div
-          className="footer-box"
-          style={{
-            background: color,
-          }}
-        >
-          <span className="icon" style={{ color }}>
-            {dashboard}
-          </span>
-          <h6>Need Help?</h6>
-          <p>Please check our docs</p>
-          <Button type="primary" className="ant-btn-sm ant-btn-block">
-            DOCUMENTATION
-          </Button>
-        </div>
-      </div> */}
+    
     </>
   );
 }

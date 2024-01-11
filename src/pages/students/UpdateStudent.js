@@ -14,18 +14,15 @@ import {
   Typography,
 } from "@mui/material";
 import "./style/update.scss";
-import Sidebar from "../../components/sidebar/Sidebar";
-import Navbar from "../../components/navbar/Navbar";
+
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { tokens } from "../../theme";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import DownloadIcon from '@mui/icons-material/Download';
-import Header from "../../components/Header"
 import {BASE_URL, API_BASE_URL, STUDENTS_API, MEDIUMS_API,STANDARDS_API } from "../../config/constants";
+import { toast } from 'react-toastify';
 
 import { useAuth } from "../../providers/AuthProvider";
 import AuthAxios from '../../config/AuthAxios';
@@ -149,14 +146,14 @@ const updateUser = async (userData) => {
 
     // The updated user data will be available in the response object
     console.log("User updated:", response.data);
-    // toast.success('Excel updloaded successfully !', {
-    //   position: toast.POSITION.TOP_CENTER
-    // });
+    toast.success('Excel updloaded successfully !', {
+      position: toast.POSITION.TOP_CENTER
+    });
     return response.data;
   } catch (error) {
-    // toast.error('Error updating excel !', {
-    //   position: toast.POSITION.TOP_CENTER
-    // });
+    toast.error('Error updating excel !', {
+      position: toast.POSITION.TOP_CENTER
+    });
     console.error("Error creating user:", error.message);
     throw error;
   }
@@ -204,19 +201,15 @@ const handleChange = (event) => {
   };
 
   return (
-    <div className="new">
-      <Sidebar />
+    <div className="new" >
       <div className="newContainer">
-        <Navbar link={"/students/" +id} />
-        <ToastContainer />
-        <Box m="20px">
-          <Header title="Update Student Details" subtitle="" />
-        </Box>  
+       
 
-        <div className="bottom">
+        <div className="top" style={{backgroundColor:'white'}}> 
         
         <Box 
-          minHeight="100vh" 
+          minHeight="80vh" 
+          // style={{marginTop:'0px'}}
           display="flex" 
           alignItems="center" 
           justifyContent="center" 
@@ -235,8 +228,7 @@ const handleChange = (event) => {
                   />
                 </div>
               </Grid>
-
-              <Grid item xs={6} rowSpan={2}>
+              <Grid item xs={6} >
                 <Box
                   display="flex"
                   alignItems="center"
@@ -268,19 +260,16 @@ const handleChange = (event) => {
                   )}
                 </Box>
               </Grid>
-
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="First Name" variant="outlined" name="first_name" value={userData?.first_name} onChange={handleChange} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Last Name" variant="outlined" name="last_name" value={userData?.last_name} onChange={handleChange} />
               </Grid>
-
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Section" variant="outlined" name="section" value={userData?.section} onChange={handleChange} />
               </Grid>
-
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Standard</InputLabel>
                   <Select label="Standard" name="class_id" value={userData?.class_id} onChange={handleChange} >
@@ -291,9 +280,7 @@ const handleChange = (event) => {
                   </Select>
                 </FormControl>
               </Grid>
-
-
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Medium</InputLabel>
                   <Select label="Medium" name="medium_id" value={userData?.medium_id} onChange={handleChange} >
@@ -306,27 +293,25 @@ const handleChange = (event) => {
                   </Select>
                 </FormControl>
               </Grid>
-
-
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Admission No" variant="outlined" name="admission_no" value={userData?.admission_no} onChange={handleChange} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Roll No" variant="outlined" name="roll_no" value={userData.roll_no} onChange={handleChange}/>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Parent Name" variant="outlined" name="parent_name" value={userData.parent_name} onChange={handleChange}/>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Parent Phone" variant="outlined" name="parent_phone" value={userData.parent_phone} onChange={handleChange}/>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="Parent Email" variant="outlined" name="parent_email" value={userData.parent_email} onChange={handleChange}/>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField fullWidth label="SR No" variant="outlined" name="sr_no" value={userData.sr_no} onChange={handleChange}/>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Gender</InputLabel>
                   <Select label="Gender" name="gender" value={userData.gender} onChange={handleChange}>
@@ -337,7 +322,7 @@ const handleChange = (event) => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   fullWidth
                   label="DOB"
@@ -349,7 +334,7 @@ const handleChange = (event) => {
                   name="dob" value={userData.dob} onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   fullWidth
                   label="Joining Date"
@@ -361,23 +346,26 @@ const handleChange = (event) => {
                   name="joining_date" value={userData.joining_date} onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={4}>
                 <TextField
                   fullWidth
                   label="Address"
                   multiline
-                  rows={3}
+                  rows={1}
                   variant="outlined"
                   name="address" value={userData.address} onChange={handleChange}
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <Button type="submit" fullWidth variant="contained" color="primary">
+              {/* <Grid container justifyContent="center"> */}
+              <Grid item xs={12} sm={4} ml={40}> {/* Adjust the sm value to your preference */}
+                <Button type="submit" fullWidth={true} variant="contained" color="primary" style={{ textAlign: 'center' }}>
                   UPDATE
                 </Button>
               </Grid>
             </Grid>
+
+            {/* </Grid> */}
           </form>
           </Box>
         </div>

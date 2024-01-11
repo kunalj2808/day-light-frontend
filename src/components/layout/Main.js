@@ -16,7 +16,8 @@ import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import Header from "./Header";
 import Footer from "./Footer";
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const { Header: AntHeader, Content, Sider } = Layout;
 
 function Main({ children }) {
@@ -120,7 +121,10 @@ function Main({ children }) {
             />
           </AntHeader>
         )}
-        <Content className="content-ant">{children}</Content>
+        <Content className="content-ant">
+    <ToastContainer />
+
+          {children}</Content>
         <Footer />
       </Layout>
     </Layout>

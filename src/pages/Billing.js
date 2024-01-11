@@ -9,7 +9,7 @@
   =========================================================
   * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
+ 
 import {
   Row,
   Col,
@@ -25,7 +25,7 @@ import { PlusOutlined, ExclamationOutlined } from "@ant-design/icons";
 import mastercard from "../assets/images/mastercard-logo.png";
 import paypal from "../assets/images/paypal-logo-2.png";
 import visa from "../assets/images/visa-logo.png";
-
+           
 function Billing() {
   const data = [
     {

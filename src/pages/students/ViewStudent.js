@@ -9,10 +9,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-
+import LineChart from "../components/chart/LineChart";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import {
+import profilavatar from "../../../src/assets/images/face-1.jpg";
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';import {
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,10 +22,25 @@ import {
   DialogTitle,
   TextField
 } from "@mui/material";
+import {
+  Card,
+  Col,
+  Row,
+  Tooltip,
+  Avatar,
+  Progress,
+  Upload,
+  message,
+  Timeline,
+  Typography,
+  Radio,
+  Button,
 
+} from "antd";
+ 
 import Chart from "../../components/material/Chart";
 
-// import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
@@ -34,11 +51,10 @@ import styled from "@emotion/styled";
 
 import {
   Box,
-  Button,
   List as List1,
   ListItem,
   ListItemText,
-  Typography,
+  // Typography,
   useTheme,
 } from "@mui/material";
 import { tokens } from "../../theme";
@@ -51,6 +67,7 @@ const ViewStudent = () => {
   const calendarRef = useRef(null);
   const startSessionDate = new Date("2023-07-01"); // Set your desired start date
   const endSessionDate = new Date("2024-06-30"); // Set your desired end date
+  const { Title, Paragraph } = Typography;
 
   const { id } = useParams();
 
@@ -70,7 +87,43 @@ const ViewStudent = () => {
   const api = AuthAxios(userToken);
 
   // const { toPDF, targetRef } = usePDF({filename: 'salary.pdf'});
-
+  const reportIcon = (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      key={1}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M15 18H5C3.89543 18 3 17.1046 3 16V4C3 2.89543 3.89543 2 5 2H15C16.1046 2 17 2.89543 17 4V16C17 17.1046 16.1046 18 15 18ZM5 0C2.23858 0 0 2.23858 0 5V16C0 18.7614 2.23858 21 5 21H15C17.7614 21 20 18.7614 20 16V5C20 2.23858 17.7614 0 15 0H5ZM10 15C10.5523 15 11 14.5523 11 14V8C11 7.44772 10.5523 7 10 7C9.44772 7 9 7.44772 9 8V14C9 14.5523 9.44772 15 10 15ZM10 5C10.5523 5 11 4.55228 11 4C11 3.44772 10.5523 3 10 3C9.44772 3 9 3.44772 9 4C9 4.55228 9.44772 5 10 5Z"
+        fill="#111827"
+      />
+    </svg>
+  );
+  
+  const pencil = [
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      key={0}
+    >
+      <path
+        d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L15.6213 7.20711L12.7929 4.37868L13.5858 3.58579Z"
+        className="fill-gray-7"
+      ></path>
+      <path
+        d="M11.3787 5.79289L3 14.1716V17H5.82842L14.2071 8.62132L11.3787 5.79289Z"
+        className="fill-gray-7"
+      ></path>
+    </svg>,
+  ];
   const getStudentAnalyticsData = () => {
 
     api
@@ -122,6 +175,7 @@ const ViewStudent = () => {
   }
 
   useEffect(() => {
+  
     // Fetch data from an API using Axios
     api
       .get("students/" + id)
@@ -137,7 +191,7 @@ const ViewStudent = () => {
         console.error("Error fetching data:", error);
       });
 
-      getStudentAnalyticsData()
+      getStudentAnalyticsData();
   }, [id]);
 
 
@@ -146,7 +200,6 @@ const ViewStudent = () => {
       .get("attendance/" + id)
       .then((response) => {
         const data = response.data; // Assuming the response contains the array of student data
-
         // eslint-disable-next-line array-callback-return
         if (calendarRef.current) {
           calendarRef.current.getApi().removeAllEvents();
@@ -161,14 +214,7 @@ const ViewStudent = () => {
           });
         }
 
-        // let events = data?.map((item) => ({
-        //   id: item.id,
-        //   title: item.status,
-        //   start: combineDateTime(item.day, item.entrance_time),
-        //   end: combineDateTime(item.day, item.exit_time),
-        //   allDay: false,
-        // }));
-        // setCurrentEvents(events); // Update the state with the fetched data
+        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -206,25 +252,6 @@ const ViewStudent = () => {
     return combinedDate;
   }
 
-  // if (  
-    //   window.confirm(
-    //     `Are you sure you want to delete the event '${date.start}'`
-    //   )
-    // ) {
-    // }
-
-
-    //const title = prompt("Please enter a new title for your event");
-    // const calendarApi = selected.view.calendar;
-    // calendarApi.unselect();
-    // calendarApi.addEvent({
-    //   id: `${selected.dateStr}-${title}`,
-    //   title,
-    //   start: selected.startStr,
-    //   end: selected.endStr,
-    //   allDay: selected.allDay,
-    // });
-
 
   const [addPopup, setAddPopup] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
@@ -247,7 +274,7 @@ const ViewStudent = () => {
       setDeletePopup(true);
       setSelectedDate(selected.event.start)
     }else{
-      // toast.error("Error...");
+      toast.error("Error...");
     }
   };
 
@@ -273,13 +300,13 @@ const ViewStudent = () => {
         getAttendanceData(id);
         getStudentAnalyticsData();
         console.log("Attendance added:", response.data);
-        // toast.success("Attendance added successfully");
+        toast.success("Attendance added successfully");
         handleCloseWarning();
       })
       .catch((error) => {
         // Handle error
         console.error("Error adding attendance:", error.response.data);
-        // toast.error("Error Adding attendance: " + error.response.data.error);
+        toast.error("Error Adding attendance: " + error.response.data.error);
         handleCloseWarning();
       });
   }
@@ -298,13 +325,13 @@ const ViewStudent = () => {
         getAttendanceData(id);
         getStudentAnalyticsData();
         console.log("Attendance deleted:", response.data);
-        // toast.success("Attendance deleted successfully");
+        toast.success("Attendance deleted successfully");
         handleCloseWarning();
       })
       .catch((error) => {
         // Handle error
         console.error("Error deleting attendance:", error.response.data);
-        // toast.error("Error Deleting attendance: " + error.response.data.error);
+        toast.error("Error Deleting attendance: " + error.response.data.error);
         handleCloseWarning();
       });
   }
@@ -383,56 +410,23 @@ const ViewStudent = () => {
         <AddAttendancePopup />
         <DeleteAttendancePopup />
 
-        <div className="top">
-          <div className="left">
-            <div className="header">
-              <div className="title">
-                <p>STUDENT DETAILS</p>
-              </div>
-            </div>
-
-            <div className="bottomContainer">
-              <div className="infoButtonContainer" >
-                <Button className="infoButton" href={"update/" + id}>
-                  <EditOutlinedIcon style={{ fontSize: 14 }} />
-                  &nbsp;Edit 
-                </Button>      
-              </div>
+        {/* <ReactNotifications /> */}
     
-              <div className="infoButtonContainer" >
-                <Button className="infoButton" >
-                  {" "}
-                  <InfoOutlinedIcon style={{ fontSize: 14 }} />
-                  &nbsp;Report  
-                </Button>  
-              </div>
-            </div> 
-
-            <div className="item">
-              <div className="details">
-                <div className="itemHead">
-                  <div className="itemImg">
-                    <img
-                      src={
-                        data?.student_image_thumbnail
-                          ? "data:image/png;base64," +
-                            data?.student_image_thumbnail
-                          : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                      }  
-                      alt=""
-                      className="itemImg img"
-                    />
-                  </div>
-                  <div className="itemTitle">
-                    <h1>
-                      {(data?.first_name ? data?.first_name : "") +
-                        " " +
-                        (data?.last_name ? data?.last_name : "")}
-                    </h1>
-                  </div>
-                </div>
-
-                <div className="detailsInfo">
+        <Row gutter={[24, 0]}>
+       
+          <Col xs={24} sm={24} md={12} lg={12} xl={8} className="mb-24">
+            <Card bordered={false} className="criclebox h-full">
+            <Row gutter={[24, 0]}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24" style={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar.Group>
+                <Avatar size={74} shape="square" src={profilavatar} />
+              </Avatar.Group>
+              <Title level={4} style={{ marginLeft: '10px', marginBottom: '0' }}>
+                {(data?.first_name ? data?.first_name : '') + ' ' + (data?.last_name ? data?.last_name : '')}
+              </Title>
+            </Col>
+          </Row>
+        <div className="detailsInfos">
                   <div className="detailItem">
                     <span className="itemKey">Standard:</span>
                     <span className="itemValue">{data?.class?.class_name}</span>
@@ -478,25 +472,23 @@ const ViewStudent = () => {
                     <span className="itemValue">{data?.address}</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="right">
-            <Chart
-              aspect={4 / 2}
-              title={
-                "Student Attendance ( This Session ): " +
-                parseFloat(studentPercentageData?.student_percentage)
-                  ?.toFixed(2)
-                  ?.toString() +
-                "%"
-              }
-              data={studentsSessionData}
-              style={{ color: "black" }}
-            />
-          </div>
-        </div>
-
+                <div className="col-action" >
+                    <Button type="link" href={"update/" + id}>
+                    {pencil} EDIT
+                    </Button>
+                    <Button className="infoButton" type="link" >
+                       {reportIcon} Report
+                      </Button>
+                    </div>
+       </Card>
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">
+        
+            <Card bordered={false} className="criclebox h-full" >
+              <LineChart  data={studentsSessionData} />
+            </Card>
+          </Col>
+        </Row>
         <div className="">
           <Box m="20px">
             <Box display="flex" justifyContent="space-between">

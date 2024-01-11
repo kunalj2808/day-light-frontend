@@ -15,10 +15,25 @@ import { Typography } from "antd";
 import { MinusOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 
-function LineChart({  title , data }) {
+function LineChart({  title  }) {
   useEffect(() => {
     console.log('data',data);
   }, []);
+  const data = [
+    { name: 'July', Total: '4.76' },
+    { name: 'August', Total: '8.70' },
+    { name: 'September', Total: '0.00' },
+    { name: 'October', Total: '33.33' },
+    { name: 'November', Total: '11.11' },
+    { name: 'December', Total: '14.29' },
+    { name: 'January', Total: '0.00' },
+    { name: 'February', Total: '0.00' },
+    { name: 'March', Total: '0.00' },
+    { name: 'April', Total: '0.00' },
+    { name: 'May', Total: '0.00' },
+    { name: 'June', Total: '0.00' },
+  ];
+  
   const { Title, Paragraph } = Typography;
   const toPercent = (decimal, fixed = 0) => `${decimal}%`;
   const j = [];
@@ -39,7 +54,7 @@ function LineChart({  title , data }) {
   
     options: {
       chart: {
-        width: "100%",
+        width: "80%",
         height: 350,
         type: "area",
         toolbar: {
@@ -61,7 +76,7 @@ function LineChart({  title , data }) {
     xaxis: {
         labels: {
           style: {
-            fontSize: "14px",
+            fontSize: "11px",
             fontWeight: 600,
             colors: [
               "#8c8c8c",

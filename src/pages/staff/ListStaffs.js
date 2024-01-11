@@ -5,9 +5,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Box, TextField, MenuItem , IconButton,DialogActions ,useTheme,Button, Dialog, DialogContent, DialogTitle} from '@mui/material';
-
+import { Grid } from '@mui/material'; // Or appropriate import for your Material-UI version
 import InputBase from "@mui/material/InputBase";
-
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from '../../theme';
 import { alpha, styled } from '@mui/material/styles';
@@ -18,8 +17,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
-
-
+import { toast  } from 'react-toastify';
 
 import {
   gridPageCountSelector,
@@ -149,9 +147,10 @@ const ListStaffs = () => {
         return (
           <div className="cellAction">
             <Button 
+            size="small"
               variant="contained" 
               //sx={{  backgroundColor: '#e2e2e2', borderColor: 'white' }}
-              color="warning"
+              color="primary"
               startIcon = {<VisibilityIcon />} 
               href={link}
               >
@@ -224,7 +223,7 @@ const ListStaffs = () => {
   const PAGE_SIZE = [10,25,50,100];
 
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: PAGE_SIZE,
+    pageSize: 10,
     page: 0,
   });
 
@@ -248,61 +247,61 @@ const ListStaffs = () => {
       />
     );
   }
-
-  useEffect(() => {
-    console.log("Fetching staffs...");
-    api.get('staffs')
-      .then((staffs) => {
-        const currentData = staffs.data.map((staff, index) => ({
-          ids:staff.id,
-          id: index + 1,
-          first_name: staff.first_name,
-          last_name: staff.last_name,
-          employee_id: staff.employee_id,
-          mobile_no: staff.mobile_no,
-          email: staff.email,
-          department: staff.email,
-          designation: staff.email,
-          // standard: student?.class.class_name || "",
-          // medium: student.medium,
-          // parent_name: student.parent_name,
-          // parent_phone: student.parent_phone,
-        }));
-    
-        setLoading(false);
-    
-        // Use setTimeout if you need a delay before setting the state
-        setTimeout(() => {
-          setDataRow(currentData);
-          console.log("dataRow after mapping and setting state:", dataRow);
-        }, 10); // Adjust the delay time as needed
-        // console.log("Staffs data:", staffs);
-        // setData(staffs.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching staffs:', error);
-      });
   
-    console.log("Fetching departments...");
-    api.get('departments')
-      .then((department) => {
-        console.log("Departments data:", department.data);
-        setDepartments(department.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching departments:', error);
-      });
+  // useEffect(() => {
+  //   console.log("Fetching staffs...");
+  //   api.get('staffs')
+  //     .then((staffs) => {
+  //       const currentData = staffs.data.map((staff, index) => ({
+  //         ids:staff.id,
+  //         id: index + 1,
+  //         first_name: staff.first_name,
+  //         last_name: staff.last_name,
+  //         employee_id: staff.employee_id,
+  //         mobile_no: staff.mobile_no,
+  //         email: staff.email,
+  //         department: staff.email,
+  //         designation: staff.email,
+  //         // standard: student?.class.class_name || "",
+  //         // medium: student.medium,
+  //         // parent_name: student.parent_name,
+  //         // parent_phone: student.parent_phone,
+  //       }));
+    
+  //       setLoading(false);
+    
+  //       // Use setTimeout if you need a delay before setting the state
+  //       setTimeout(() => {
+  //         setDataRow(currentData);
+  //         console.log("dataRow after mapping and setting state:", dataRow);
+  //       }, 10); 
+        
+        
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching staffs:', error);
+  //     });
   
-    console.log("Fetching designations...");
-    api.get('designations')
-      .then((designation) => {
-        console.log("Designations data:", designation.data);
-        setDesignations(designation.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching designations:', error);
-      });
-  }, []);
+  //   console.log("Fetching departments...");
+  //   api.get('departments')
+  //     .then((department) => {
+  //       console.log("Departments data:", department.data);
+  //       setDepartments(department.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching departments:', error);
+  //     });
+  
+  //   console.log("Fetching designations...");
+  //   api.get('designations')
+  //     .then((designation) => {
+  //       console.log("Designations data:", designation.data);
+  //       setDesignations(designation.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching designations:', error);
+  //     });
+  // }, []);
   
  
 
@@ -326,6 +325,13 @@ const ListStaffs = () => {
 //     }
 //   };
 
+useEffect(() => {
+
+  api.get('staffs').then((staffs) => {setData(staffs.data)}).catch((error) => {console.error('Error fetching data:', error);});
+  api.get('departments').then((department) => {setDepartments(department.data)}).catch((error) => {console.error('Error fetching data:', error);});
+  api.get('designations').then((designation) => {setDesignations(designation.data)}).catch((error) => {console.error('Error fetching data:', error);});
+
+}, []);
   // Function to call the API and update class_id values
   const deleteStaffs = async (ids) => {
     try {
@@ -338,15 +344,15 @@ const ListStaffs = () => {
       //dataRef.current.api.selectRows([6,3]);
       dataRef.current.refreshCells();
       
-    //   toast.success('Staffs Deleted successfully!', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
+      toast.success('Staffs Deleted successfully!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (error) {
       console.error('Error deleting staffs:', error);
       // Show error toast message
-    //   toast.error('Error deleteing students!', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
+      toast.error('Error deleteing students!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
   const navigate = useNavigate();
@@ -438,14 +444,18 @@ const ListStaffs = () => {
   return (
     <div className="list">
     
-     
     <div className="listContainer">
-      <Box m="20px">
-      <Box display='flex' justifyContent="flex-end" >
+      <Box m="5px">
+      <Grid container spacing={0}>
+  {/* Left side */}
+ 
+  <Grid item xs={6}>
+  <Box display='flex' justifyContent="left" >
         
 
         <Button 
           variant="contained" 
+          size='small'
           startIcon={<PersonAddIcon />} 
           color = "primary" 
           href="/staffs/create"
@@ -458,7 +468,7 @@ const ListStaffs = () => {
           variant="contained"
           disabled={selectedValue.length <= 0} 
           color="warning"
-          
+          size='small'
           startIcon={<DeleteOutlineOutlinedIcon />}
           sx={{ color: 'white', mr:2}} 
           onClick={() => deleteStaffs(selectedValue)}
@@ -491,6 +501,7 @@ const ListStaffs = () => {
         variant="contained"
         color="primary"
         onClick={handleOpenModal}
+        size='small'
         sx={{ mr: 2 }}
       >
         Download Reports
@@ -521,15 +532,18 @@ const ListStaffs = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-    <Box display="flex" alignItems="center" justifyContent="flex-start" mb={2}>
+  </Grid>
+  {/* Right side */}
+  <Grid item xs={6}>
+  <Box display="flex" alignItems="" justifyContent="left" mb={2}>
       
       <Box
         sx={{ mr: 2 }}
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
+        
       >
-      <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" onChange={handleSearch} />
+      <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" onChange={handleSearch} />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton>
@@ -542,6 +556,7 @@ const ListStaffs = () => {
           label="Department"
           variant="outlined"
           size="small"
+          style={{ width: '130px' }}
           value={departmentValue}
           sx={{ width: '10%', mr:2}}
           onChange={handleFilterChange}
@@ -560,6 +575,7 @@ const ListStaffs = () => {
           label="Designation"
           variant="outlined"
           size="small"
+          style={{ width: '125px' }}
           value={designationValue}
           sx={{ width: '10%', mr:2}}
           onChange={handleFilterChange}
@@ -573,10 +589,12 @@ const ListStaffs = () => {
         </TextField>
 
     </Box>
+  </Grid>
+</Grid>
       
     <Box
         m="20px 0px 20px 0px"
-        height="600px"
+        height="518px"
         //height="70vh" to make datatable non scrolling
         
         sx={{
@@ -586,11 +604,12 @@ const ListStaffs = () => {
           '& .MuiDataGrid-cell': {
             borderBottom: '1',
           },
+          
           '& .name-column--cell': {
             color: colors.primary[100],
           },
           '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: "#F9D82A",
+            backgroundColor: "#1890ff",
             borderBottom: '4',
           },
           '& .MuiDataGrid-virtualScroller': {
@@ -598,7 +617,7 @@ const ListStaffs = () => {
           },
           '& .MuiDataGrid-footerContainer': {
             borderTop: '4',
-            backgroundColor: "#F9D82A",
+            backgroundColor: "",
           },
           '& .MuiCheckbox-root': {
             color: `${colors.greenAccent[300]} !important`,
@@ -614,7 +633,7 @@ const ListStaffs = () => {
           
         }}
       >
-       <DataGrid
+        <DataGrid
        getRowClassName={(params) =>
         params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
       }
@@ -623,21 +642,21 @@ const ListStaffs = () => {
         ref = {dataRef}
         //className="datagrid"
         key={data.length}
-        rows={dataRow}
+        rows={data}
         columns={columns}
         //pageSize={10}
         rowsPerPageOptions={[10,25,50,100]}
         pageSize={10}
         checkboxSelection
         pageSizeOptions={PAGE_SIZE}
-        // paginationModel={paginationModel}
+        paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         slots={{
           pagination: CustomPagination,
         }}
         onSelectionModelChange={(ids) => {
           const selectedIDs = new Set(ids);
-          //console.log(selectedIDs)
+          console.log(selectedIDs)
           let selectedArray = Array.from(selectedIDs);
           setSelectedValue(selectedArray);
           //selectedArray.map(value=> console.log(value))

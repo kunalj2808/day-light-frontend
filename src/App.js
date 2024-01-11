@@ -1,7 +1,6 @@
 import Dashboard from "./pages/Home.js";
 import Login from "./pages/auth/SignIn.js";
 import Main from "../src/components/layout/Main.js";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
@@ -22,6 +21,7 @@ import ViewStaff from "./pages/staff/ViewStaff.js";
 import Create from "./pages/students/Create.js";
 import SalarySlip from "./pages/staff/salarySlip.js";
 import CreateStaff from "./pages/students/CreateStaff.js";
+import UpdateStudent from "./pages/students/UpdateStudent.js";
 
 function App() {
   const { isLoggedIn, userToken } = useAuth(); // Use the useAuth hook
@@ -47,6 +47,7 @@ function App() {
               <Route path="staff/salarySlip/:id" element={<Main><SalarySlip /></Main>} />
               <Route path="/create" element={<Main><Create /></Main>} />
               <Route path="/staffs/create" element={<Main><CreateStaff /></Main>} />
+              <Route path="/students/update/:id" element={<Main><UpdateStudent /></Main>} />
               {/* Other routes for authenticated users */}
               <Route path="*" element={<Main><Dashboard userToken={userToken} /></Main>} />
             </>

@@ -2,7 +2,7 @@ import "./style/salary.scss";
 
 import React, { useState, useEffect,useRef } from 'react';
 import { Button, TextField, Box,} from '@mui/material';
-// import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -57,7 +57,7 @@ const SalarySlip = () => {
         console.log(new Date())
 
         if(salaryDate === null || basicSalary === null){
-            // toast.error('Please Select all fields')
+            toast.error('Please Select all fields')
             return
         }
 
@@ -97,7 +97,6 @@ const SalarySlip = () => {
     return (
         <div className="new">
             <div className="newContainer">
-                {/* <ToastContainer /> */}
                 <Box m="20px">
                     <Box style={{ display: 'flex', flexDirection: 'column'}} alignItems="center" justifyContent="center" mb={2}>
                         <Box m={2}  >

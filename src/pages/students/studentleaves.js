@@ -9,10 +9,12 @@ import listPlugin from "@fullcalendar/list";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import {  Tab, Tabs } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import Card from '@mui/material/Card';
 import MenuIcon from '@mui/icons-material/Menu';
+import Container from 'react-bootstrap/Container';
 import {
   useTheme,
   Checkbox,
@@ -35,6 +37,7 @@ import { tokens } from "../../theme";
 
 import { useAuth } from "../../providers/AuthProvider";
 import AuthAxios from "../../config/AuthAxios";
+import {  toast } from 'react-toastify';
 
 const StudentLeaves = () => {
   const theme = useTheme();
@@ -61,6 +64,10 @@ const StudentLeaves = () => {
   const [selectedFilterClasses, setSelectedFilterClasses] = useState([]);
   const [selectedFilterMediums, setSelectedFilterMediums] = useState([]);
 
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedChip(newValue);
+  };
   // set these values with api with current session
   const minDate = new Date("07-01-2023");
   const maxDate = addDays(minDate, 365);
@@ -141,12 +148,12 @@ const StudentLeaves = () => {
   const updateLeaves = () => {
 
     if(selectedClasses.length < 1){
-    //   toast.error('Please select at least one class')
+      toast.error('Please select at least one class')
       return
     }
 
     if(selectedMediums.length < 1){
-    //   toast.error('Please select at least one medium')
+      toast.error('Please select at least one medium')
       return
     }
 
@@ -180,23 +187,23 @@ const StudentLeaves = () => {
         console.log("staff data", data);
         getLeaves()
         refreshData()
-        // toast.success('Leaves created succesfully!!!')
+        toast.success('Leaves created succesfully!!!')
       })
       .catch(error => {
         console.error('Error fetching data:', error);
-        // toast.error('Error creating Leaves:', error.response.data)
+        toast.error('Error creating Leaves:', error.response.data)
     });
   }
 
   const deleteLeaves = () => {
 
     if(selectedClasses.length < 1){
-    //   toast.error('Please select at least one class')
+      toast.error('Please select at least one class')
       return
     }
 
     if(selectedMediums.length < 1){
-    //   toast.error('Please select at least one medium')
+      toast.error('Please select at least one medium')
       return
     }
 
@@ -230,11 +237,11 @@ const StudentLeaves = () => {
         console.log("delete data", data);
         getLeaves()
         refreshData()
-        // toast.success('Leaves deleted succesfully!!!')
+        toast.success('Leaves deleted succesfully!!!')
       })
       .catch(error => {
         console.error('Error deleting data:', error);
-        // toast.error('Error deleting Leaves:', error.response.data)
+        toast.error('Error deleting Leaves:', error.response.data)
     });
   }
 
@@ -553,17 +560,11 @@ const StudentLeaves = () => {
     <div className="single">
       <div className="singleContainer">
         {/* <ToastContainer /> */}
-        <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-        
-          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-            Manage Students Leaves
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
         <Box m="20px">
+        <Card style={{padding:'12px', backgroundColor:'white'}}>
+        <Container>
+         <h2 style={{color:"black",marginLeft:"7px"}}>Manage Student Leaves</h2>
+        </Container>
           <Box
             display="flex"
             alignItems="center"
@@ -585,37 +586,36 @@ const StudentLeaves = () => {
             />
           </Box>
           <Box
-            flex="1 1 20%"
-            backgroundColor={colors.primary[400]}
-            p="15px"
-            borderRadius="4px"
-            justifyContent="center"
-            alignItems="flex-end"
-            justifyItems={"center"}
-            display="flex"
-          >
-            <Chip
-              style={{ margin: "4px" }}
-              label="Select By Date"
-              color={selectedChip === "date" ? "primary" : "default"}
-              variant={selectedChip === "date" ? "outlined" : "default"}
-              onClick={() => handleChipClick("date")}
-            />
-             <Chip
-              style={{ margin: "4px" }}
-              label="Select Range of Dates"
-              color={selectedChip === "range" ? "primary" : "default"}
-              variant={selectedChip === "range" ? "outlined" : "default"}
-              onClick={() => handleChipClick("range")}
-            />
-            <Chip
-              style={{ margin: "4px" }}
-              label="Select By Weekdays"
-              color={selectedChip === "days" ? "primary" : "default"}
-              variant={selectedChip === "days" ? "outlined" : "default"}
-              onClick={() => handleChipClick("days")}
-            />
-          </Box>
+      flex="1 1 20%"
+      backgroundColor={colors.primary[400]}
+      p="15px"
+      borderRadius="4px"
+      justifyContent="center"
+      alignItems="flex-end"
+      justifyItems="center"
+      display="flex"
+    >
+      <Tabs value={selectedChip} onChange={handleTabChange}>
+        <Tab
+          label="Select By Date"
+          value="date"
+          onClick={() => handleChipClick('date')}
+          wrapped
+        />
+        <Tab
+          label="Select Range of Dates"
+          value="range"
+          onClick={() => handleChipClick('range')}
+          wrapped
+        />
+        <Tab
+          label="Select By Weekdays"
+          value="days"
+          onClick={() => handleChipClick('days')}
+          wrapped
+        />
+      </Tabs>
+    </Box>
 
           <Box
             flex="1"
@@ -671,16 +671,13 @@ const StudentLeaves = () => {
             > Delete</Button>
           </Box>
 
-          <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-        
-          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-          View Students Leaves
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
+      </Card>
+      </Box>
+      <Box m="20px">
+      <Card style={{padding:'12px', backgroundColor:'white'}}>
+        <Container>
+         <h2 style={{color:"black",marginLeft:"7px"}}>View Students Leaves</h2>
+        </Container>
           <Box
             display="flex"
             justifyContent="space-between"
@@ -737,6 +734,7 @@ const StudentLeaves = () => {
               />
             </Box>
           </Box>
+          </Card>
         </Box>
       </div>
     </div>

@@ -5,6 +5,8 @@ import { DribbbleOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } 
 import { useAuth } from "../../providers/AuthProvider"; // Import the useAuth hook
 import AuthAxios from '../../config/AuthAxios';
 import { useNavigate  } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 function SignIn() {
@@ -47,8 +49,10 @@ function SignIn() {
       navigate("/"); // Redirect to the dashboard or desired page
     } catch (error) {
       setLoading(false);
-      console.error(error);
-      // Handle error appropriately
+      toast.error(error.response.data.error, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      console.log(error);
     }
   };
 
@@ -152,6 +156,7 @@ function SignIn() {
           </div>
          
         </Header>
+        <ToastContainer />
         <Content className="signin">
         <div style={{ display: '', justifyContent: 'center', alignItems: 'center' }}>
 

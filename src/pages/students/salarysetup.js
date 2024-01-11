@@ -18,7 +18,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import DeleteIcon from '@mui/icons-material/Delete';
 // import Sidebar from "../../components/sidebar/Sidebar";
 // import Navbar from "../../components/navbar/Navbar";
-// import { ToastContainer,toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "./style/setup.scss";
 // import Header from "../../components/Header";
 
@@ -60,12 +60,12 @@ const StudentSetup = () => {
             .then(response => {
                 // Handle success
                 console.log('Classes updated:', response.data);
-                // toast.success('Classes updated successfully');
+                toast.success('Classes updated successfully');
             })
             .catch(error => {
                 // Handle error
                 console.error('Error updating classes:', error);
-                // toast.error('Error updating classes');
+                toast.error('Error updating classes');
             });
     };
 
@@ -83,10 +83,10 @@ const StudentSetup = () => {
                 setMinSalary('')
                 setMaxSalary('')
                 getData();
-                // toast.success('Salary Component added successfully');
+                toast.success('Salary Component added successfully');
             })
             .catch((error) => {
-                // toast.error('Error adding component: ' + error?.response?.data?.error);
+                toast.error('Error adding component: ' + error?.response?.data?.error);
                 console.error('Error adding component:', console.error);
             });
 
@@ -98,11 +98,11 @@ const StudentSetup = () => {
         })
             .then((response) => {
                 getData();
-                // toast.success('Salary Component deleted successfully');
+                toast.success('Salary Component deleted successfully');
             })
             .catch((error) => {
                 console.error('Error fetching mediums:', error);
-                // toast.error('Error deleting component: ' + error?.response?.data?.error);
+                toast.error('Error deleting component: ' + error?.response?.data?.error);
             });
     }
   
@@ -167,13 +167,13 @@ const StudentSetup = () => {
                 setAddPopup(false);
                 setDeletePopup(false);
                 setSelectedDate(null);
-                // toast.success("Attendance added successfully");
+                toast.success("Attendance added successfully");
                 handleCloseWarning();
             })
             .catch((error) => {
                 // Handle error
                 console.error("Error adding attendance:", error.response.data);
-                // toast.error("Error Adding attendance: " + error.response.data.error);
+                toast.error("Error Adding attendance: " + error.response.data.error);
                 handleCloseWarning();
             });
     };
@@ -218,28 +218,19 @@ const StudentSetup = () => {
             </Dialog>
             {/* <Sidebar /> */}
             <div className="newContainer">
-                {/* <Navbar link={"/"} /> */}
-                {/* <ToastContainer /> */}
-                <Box m="20px">
-                    {/* <Header title="Add Salary Commponents" subtitle="" /> */}
-                </Box> 
+                
 
                 <Grid container>
                     <Grid item xs={6} className="section">
-                        <Box m="20px">
-                            <h2>Add Component</h2>
-                            <Box display='flex' justifyContent="flex-start" >
-                                <Button variant="outlined" onClick={() => AddSalaryComponent()}>
-                                    Add Salary Component
-                                </Button>
-                                &nbsp;
-                                <Button variant="outlined" onClick={openModal}>
-                                    Set Entry Time
-                                </Button>
-
-                            </Box>
-                        </Box>
-                       
+                    <Box m="15px" display="flex" alignItems="center">
+                        <h2 style={{ marginRight: '15px' }}>Add Component</h2>
+                        <Button variant="outlined" size='small' onClick={AddSalaryComponent} sx={{ marginRight: '10px' }}>
+                            Add Salary Component
+                        </Button>
+                        <Button variant="outlined" size='small' onClick={openModal}>
+                            Set Entry Time
+                        </Button>
+                     </Box>
                         <div className="bottom">
                             <Box sx={{width: '100%' , backgroundColor: 'white'}}>
                                 <Box sx={{ m:2}} >
@@ -271,69 +262,71 @@ const StudentSetup = () => {
                                 </Box>
 
                                 <TableContainer component={Paper}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Component Name</TableCell>
-                                                    <TableCell>Component Type</TableCell>
-                                                    <TableCell>Value</TableCell>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Component Name</TableCell>
+                                                <TableCell>Component Type</TableCell>
+                                                <TableCell>Value</TableCell>
+                                                <TableCell>Action</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {componentRows.map((row) => (
+                                                <TableRow key={row.order_no}>
+                                                    <TableCell>
+                                                        <TextField
+                                                            type="text"
+                                                            variant="outlined"
+                                                            size="small"
+                                                            value={row.component_name}
+                                                            onChange={(event) => handleCellValueChange(row.order_no, 'component_name', event.target.value)}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell style={{ padding: '4px', fontSize: '12px' }}>
+                                                        <Select
+                                                            label="Type"
+                                                            name="component_type"
+                                                            value={row?.component_type ? row?.component_type : 'select'}
+                                                            onChange={(event) => handleCellValueChange(row.order_no, 'component_type', event.target.value)}
+                                                            size="small"
+                                                        >
+                                                            <MenuItem disabled value="select">Select Component Type</MenuItem>
+                                                            {compTypes.map(item => (
+                                                                <MenuItem key={item?.id} value={item?.name}>{item?.name}</MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <TextField
+                                                            type="number"
+                                                            variant="outlined"
+                                                            size="small"
+                                                            value={row.component_value}
+                                                            onChange={(event) => handleCellValueChange(row.order_no, 'component_value', event.target.value)}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Button
+                                                            variant="text"
+                                                            color="error"
+                                                            onClick={() => handleDeleteRowComponent(row.order_no)}
+                                                            size="small"
+                                                        >
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    </TableCell>
                                                 </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {componentRows.map((row) => (
-                                                    <TableRow key={row.order_no}>
-                                                        <TableCell>
-                                                            <TextField
-                                                                type="text"
-                                                                variant="outlined"
-                                                                size="small"
-                                                                value={row.component_name}
-                                                                onChange={(event) => handleCellValueChange(row.order_no,'component_name',event.target.value)}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell style={{ padding: '4px', fontSize: '12px',}}>
-
-                                                            <Select label="Type" name="component_type" value={row?.component_type?row?.component_type:'select'} 
-                                                                    onChange={(event) => handleCellValueChange(row.order_no,'component_type',event.target.value)} >
-                                                                <MenuItem disabled value='select' >Select Component Type</MenuItem>
-                                                                {compTypes.map(item => (
-                                                                    <MenuItem  key={item?.id} value={item?.name}>{item?.name}</MenuItem>
-                                                                ))}
-                                                            </Select>
-
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <TextField
-                                                                type="number"
-                                                                variant="outlined"
-                                                                size="small"
-                                                                value={row.component_value}
-                                                                onChange={(event) => handleCellValueChange(row.order_no,'component_value',event.target.value)}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        
-                                                            <Button
-                                                                variant="text"
-                                                                color="error"
-                                                                onClick={() => handleDeleteRowComponent(row.order_no)}
-                                                            >
-                                                                <DeleteIcon />
-                                                            </Button>
-                                                        
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-
-                                        <div className="tableButtons">
-                                            <Button btn-type="class" variant="outlined" color="primary" onClick={handleAddRowComponent}>
-                                                Add Component
-                                            </Button>
-                                        </div>
-
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                    <div className="tableButtons">
+                                        <Button btn-type="class" variant="outlined" color="primary" onClick={handleAddRowComponent}>
+                                            Add Component
+                                        </Button>
+                                    </div>
                                 </TableContainer>
+
                             </Box>
                         </div>
                     </Grid>

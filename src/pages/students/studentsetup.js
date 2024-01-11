@@ -13,7 +13,6 @@ import {
   Grid,
   Card,
 } from "@mui/material";
-import EditRowModal from "../components/EditModal"; // Import the modal component
 
 import {
   Dialog,
@@ -23,7 +22,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-// import { ToastContainer,toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "./style/setup.scss";
 import axios from "axios";
 
@@ -38,6 +37,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const StudentSetup = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [buttonType, setButtonType] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedData, setUpdatedData] = useState({});
 
@@ -54,21 +54,53 @@ const StudentSetup = () => {
   const [initialMediumOrder, setInitialMediumOrder] = useState(0);
 
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
+  const handleClickOpen = (event) => {
+    const btnType = event.currentTarget.getAttribute("btn-type");
+    console.log("btn-type:", btnType); // Output: 'class' when the button is clicked
+    setButtonType(btnType);
     setOpen(true);
   };
+
+  // In your JSX:
+  <Button
+    btn-type="class"
+    variant="outlined"
+    color="error"
+    onClick={handleClickOpen}
+  >
+    Click me
+  </Button>;
+
   const handleCloseWarning = () => {
     setOpenWarning(false);
   };
-  const handleEditRow = (id) => {
-    api.get('standards/' + id)
+  const handleEditRow = (id,event) => {
+    setButtonType('class');
+    api
+      .get("standards/" + id)
       .then((response) => {
         const data = response.data;
         setSelectedRow(data);
         handleOpenModal();
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
+      });
+  };
+  const handleMediumEditRow = (id) => {
+    setButtonType('medium');
+
+  //  return;
+    api
+      .get("mediums/" + id)
+      .then((response) => {
+        const data = response.data;
+        console.log("datads",data);
+        setSelectedRow(data);
+        handleOpenModal();
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   };
 
@@ -90,6 +122,7 @@ const StudentSetup = () => {
         setMediums(response.data);
         setMediumRows(
           response.data.map((medium, index) => ({
+            id:medium.id,
             order_no: medium.mid,
             medium_name: medium.type,
           }))
@@ -121,24 +154,23 @@ const StudentSetup = () => {
   }, []);
 
   const ModalComponent = ({ data, closeModal }) => {
-  useEffect(() => {
-    console.log(data); // Log the 'data' whenever it changes
-  }, [data]);
-  
-  return (
-    <div className="modal">
-      
-      <div className="modal-content">
-        {data && data.class_name ? (
-          <h1>{data.class_name}</h1>
-        ) : (
-          <p>No class name available</p>
-        )}
-        <button onClick={closeModal}>Close Modal</button>
+    useEffect(() => {
+      console.log(data); // Log the 'data' whenever it changes
+    }, [data]);
+
+    return (
+      <div className="modal">
+        <div className="modal-content">
+          {data && data.class_name ? (
+            <h1>{data.class_name}</h1>
+          ) : (
+            <p>No class name available</p>
+          )}
+          <button onClick={closeModal}>Close Modal</button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   const { userToken } = useAuth();
   const api = AuthAxios(userToken);
@@ -153,29 +185,31 @@ const StudentSetup = () => {
       .then((response) => {
         // Handle success
         console.log("Classes updated:", response.data);
-        // toast.success('Classes updated successfully');
+        toast.success('Classes updated successfully');
       })
       .catch((error) => {
         // Handle error
         console.error("Error updating classes:", error);
-        // toast.error('Error updating classes');
+        toast.error('Error updating classes');
       });
   };
 
   const handleUpdateMediums = () => {
-    // Call Axios function to update mediums
-    // For example:
+    console.log(inputFields);
+   
     api
-      .post("/mediums", { mediums: mediumRows })
+      .post("/mediums", {
+        mediums: inputFields,
+      })
       .then((response) => {
         // Handle success
-        console.log("Mediums updated:", response.data);
-        // toast.success('Mediums updated successfully');
+        console.log("Classes updated:", response.data);
+        toast.success('Classes updated successfully');
       })
       .catch((error) => {
         // Handle error
-        console.error("Error updating mediums:", error);
-        // toast.error('Error updating mediums');
+        console.error("Error updating classes:", error);
+        toast.error('Error updating classes');
       });
   };
   const handleAddInputField = () => {
@@ -214,18 +248,36 @@ const StudentSetup = () => {
   };
 
   const handleUpdateData = () => {
+    
     console.log(updatedData);
     api
       .post("/updateStandards", { data: updatedData })
       .then((response) => {
         // Handle success
         console.log("standard updated:", response.data);
-        // toast.success('Mediums updated successfully');
+        toast.success('Mediums updated successfully');
       })
       .catch((error) => {
         // Handle error
         console.error("Error updating mediums:", error);
-        // toast.error('Error updating mediums');
+        toast.error('Error updating mediums');
+      });
+    handleCloseModal(); // Temporarily closing the modal without API interaction in this example
+  };
+  const handleMediumUpdateData = () => {
+    
+    console.log(updatedData);
+    api
+      .post("/updateMediums", { data: updatedData })
+      .then((response) => {
+        // Handle success
+        console.log("standard updated:", response.data);
+        toast.success('Mediums updated successfully');
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error updating mediums:", error);
+        toast.error('Error updating mediums');
       });
     handleCloseModal(); // Temporarily closing the modal without API interaction in this example
   };
@@ -237,7 +289,7 @@ const StudentSetup = () => {
       );
       if (initialClass) {
         console.log("Cannot delete initial class:", initialClass.class_name);
-        // toast.error('Cannot delete initial class');
+        toast.error('Cannot delete initial class');
         return;
       }
       const updatedRows = classRows.filter((row) => row.order_no !== orderNo);
@@ -256,7 +308,7 @@ const StudentSetup = () => {
       );
       if (initialMedium) {
         console.log("Cannot delete initial medium:", initialMedium.medium_name);
-        // toast.error('Cannot delete initial medium');
+        toast.error('Cannot delete initial medium');
         return;
       }
       const updatedRows = mediumRows.filter((row) => row.order_no !== orderNo);
@@ -284,22 +336,21 @@ const StudentSetup = () => {
   const [popupType, setPopupType] = useState("");
 
   const handleOpenWarning = (e) => {
-    console.log("e", e.target.getAttribute("btn-type"));
+   
     setOpenWarning(true);
-    setPopupType(e.target.getAttribute("btn-type"));
+    setPopupType(buttonType);
   };
   const handleFieldChange = (event, id) => {
     const { name, value } = event.target;
-  
+
     // Update 'updatedData' including the 'id' field
     setUpdatedData((prevData) => ({
       ...prevData,
       [name]: value,
-      id: id // Update 'id' with the provided 'id'
+      id: id, // Update 'id' with the provided 'id'
     }));
   };
-  
-  
+
   const handleUpdateForm = () => {
     // Pass the array of objects to your function for further processing
     console.log(inputFields);
@@ -310,12 +361,12 @@ const StudentSetup = () => {
       .then((response) => {
         // Handle success
         console.log("Classes updated:", response.data);
-        // toast.success('Classes updated successfully');
+        toast.success('Classes updated successfully');
       })
       .catch((error) => {
         // Handle error
         console.error("Error updating classes:", error);
-        // toast.error('Error updating classes');
+        toast.error('Error updating classes');
       });
   };
   // You can perform actions with inputFields array here
@@ -333,39 +384,29 @@ const StudentSetup = () => {
   return (
     <div className="new">
       <div className="newContainer">
-        {/* <ToastContainer /> */}
-        <Dialog open={openEditModal} onClose={handleClose}>
-          {/* Modal content for editing row */}
-          <div>
-            {selectedRow}
-            {/* Input fields to edit row details */}
-            {/* Save and Cancel buttons */}
-            {/* <Button onClick={handleSave}>Save</Button>
-        <Button onClick={handleClose}>Cancel</Button> */}
-          </div>
+        {/* Warning Dialog */}
+        <Dialog open={openWarning} onClose={handleCloseWarning}>
+          <DialogTitle>Warning</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Once you create classes or mediums, they cannot be deleted within
+              the current session. However, you can update and add new ones
+              anytime.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleProceedUpdate} color="primary">
+              Proceed
+            </Button>
+            <Button onClick={handleCloseWarning} color="primary" autoFocus>
+              Cancel
+            </Button>
+          </DialogActions>
         </Dialog>
-         {/* Warning Dialog */}
-      <Dialog open={openWarning} onClose={handleCloseWarning}>
-        <DialogTitle>Warning</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Once you create classes or mediums, they cannot be deleted within the current session.
-            However, you can update and add new ones anytime.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleProceedUpdate} color="primary">
-            Proceed
-          </Button>
-          <Button onClick={handleCloseWarning} color="primary" autoFocus>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-        
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle sx={{ textAlign: "center" }}>
-            {"Add Class"} &nbsp;
+          {buttonType === 'class' ? 'Add Class' : 'Add Medium'}&nbsp;
             <Button
               variant="outlined"
               size="small"
@@ -390,7 +431,7 @@ const StudentSetup = () => {
                 <TextField
                   value={field.value}
                   onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  label={`Add Class`}
+                  label={`Add ${buttonType === 'class' ? 'Class' : 'Medium'}`}
                   variant="outlined"
                 />
                 &nbsp;
@@ -413,9 +454,7 @@ const StudentSetup = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        {isModalOpen && (
-        <ModalComponent data={selectedRow} />
-      )}
+
         <Dialog open={openEditBox} onClose={handleClose}>
           <DialogTitle sx={{ textAlign: "center" }}>
             {"Add Class"} &nbsp;
@@ -467,39 +506,46 @@ const StudentSetup = () => {
           </DialogActions>
         </Dialog>
         <Dialog open={isModalOpen} onClose={handleCloseModal}>
-  <DialogTitle>Edit Modal</DialogTitle>
-  <DialogContent>
-    {selectedRow ? (
-      <>
-        <TextField
-          label="ID"
-          name="id"
-          type="hidden"
-          value={selectedRow.id} // Set the ID value
-        />
-        <TextField
-          label="Class Name"
-          name="class_name"
-          value={updatedData.class_name || selectedRow.class_name}
-          onChange={(e) => handleFieldChange(e, selectedRow.id)} // Pass selectedRow.id
-          fullWidth
-          margin="normal"
-        />
-        {/* Add other fields similarly */}
-      </>
-    ) : (
-      <p>No data available</p>
-    )}
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={handleCloseModal} color="primary">
-      Close
-    </Button>
-    <Button onClick={handleUpdateData} color="primary">
-      Update
-    </Button>
-  </DialogActions>
-</Dialog>
+          <DialogTitle>Edit {buttonType === 'class' ? ' Class' : ' Medium'}
+           </DialogTitle>
+          <DialogContent>
+            {selectedRow ? (
+              <>
+                <label>Order ID</label>
+                <br />
+                <TextField
+                  // label="Order ID"
+                  name="id"
+                  disabled
+                  value={selectedRow.id} // Set the ID value
+                />
+              <TextField
+              label={buttonType === 'class' ? 'Class Name' : 'Type'} // Set label based on buttonType
+              name={buttonType === 'class' ? 'class_name' : 'type'} // Set name based on buttonType
+              value={
+                buttonType === 'class'
+                  ? updatedData.class_name || selectedRow.class_name // Display class_name if buttonType is 'class'
+                  : updatedData.type || selectedRow.type // Display type otherwise
+              }
+              onChange={(e) => handleFieldChange(e, selectedRow.id)}
+              fullWidth
+              margin="normal"
+            />
+
+              </>
+            ) : (
+              <p>No data available</p>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseModal} color="primary">
+              Close
+            </Button>
+            <Button onClick={buttonType === 'class' ? handleUpdateData : handleMediumUpdateData} color="primary">
+              Update
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Grid container>
           <Grid item xs={6} className="section">
             <div className="">
@@ -513,6 +559,7 @@ const StudentSetup = () => {
                     >
                       <h2 style={{ color: "", margin: 0 }}>Add Classes</h2>
                       <Button
+                        btn-type="class"
                         variant="outlined"
                         color="error"
                         onClick={handleClickOpen}
@@ -549,6 +596,7 @@ const StudentSetup = () => {
                         </TableCell>
                         <TableCell align="right">
                           <Button
+                          btn-type="class"
                             variant="text"
                             color="primary"
                             onClick={() => {
@@ -564,88 +612,64 @@ const StudentSetup = () => {
                 </Table>
               </TableContainer>
             </div>
-            {/* <EditRowModal
-              open={openEditModal}
-              data={selectedRow}
-              handleClose={handleCloseModal}
-              handleEditRow={""}
-            /> */}
           </Grid>
 
           <Grid item xs={6} className="section">
-            <Box m="20px">
-              <Card style={{ padding: "7px", backgroundColor: "#5175f8" }}>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <h2 style={{ color: "white", margin: 0 }}>Add Medium</h2>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={handleAddMediumRow}
-                  >
-                    Add
-                  </Button>
-                </Box>
-              </Card>
-            </Box>
-            <div className="bottom" style={{ marginLeft: "12px" }}>
+            <div className="">
               <TableContainer component={Paper}>
-                <Table>
+                <Box m="20px">
+                  <Card style={{ padding: "7px", backgroundColor: "" }}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <h2>Add Medium</h2>
+                      <Button
+                        btn-type="medium"
+                        variant="outlined"
+                        color="error"
+                        onClick={handleClickOpen}
+                      >
+                        Add Medium
+                      </Button>
+                    </Box>
+                  </Card>
+                </Box>
+                <Table sx={{ minWidth: 250 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Order No</TableCell>
-                      <TableCell>Medium Name</TableCell>
-                      <TableCell>Action</TableCell>
+                      <TableCell align="left">Medium</TableCell>
+                      <TableCell align="right">Action&nbsp;</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {mediumRows.map((row) => (
-                      <TableRow key={row.order_no}>
-                        <TableCell>{row.order_no}</TableCell>
-                        <TableCell style={{ padding: "4px", fontSize: "12px" }}>
-                          <TextField
-                            value={row.medium_name}
-                            onChange={(e) =>
-                              handleCellValueChange(
-                                row.order_no,
-                                "medium_name",
-                                e.target.value,
-                                "medium"
-                              )
-                            }
-                          />
+                      <TableRow
+                        key={row.order_no}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell align="left" component="th" scope="row">
+                          {row.medium_name}
                         </TableCell>
-                        <TableCell>
-                          {/* {row.order_no > initialMediumOrder && ( */}
+                        <TableCell align="right">
                           <Button
-                            disabled={row.order_no <= initialMediumOrder}
+                          btn-type="class"
                             variant="text"
-                            color="error"
-                            onClick={() =>
-                              handleDeleteRow(row.order_no, "medium")
-                            }
+                            color="primary"
+                            onClick={() => {
+                              handleMediumEditRow(row.id);
+                            }}
                           >
                             <EditIcon />
                           </Button>
-                          {/* )} */}
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-                <div className="tableButtons">
-                  <Button
-                    btn-type="medium"
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleOpenWarning}
-                  >
-                    Update Mediums
-                  </Button>
-                </div>
               </TableContainer>
             </div>
           </Grid>

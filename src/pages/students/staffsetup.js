@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./style/setup.scss";
+import {  toast } from 'react-toastify';
 
 import { useAuth } from "../../providers/AuthProvider";
 import AuthAxios from "../../config/AuthAxios";
@@ -78,21 +79,19 @@ const StaffSetup = () => {
       (row) => row.entry_time < row.exit_time
     );
     if (!isValid) {
-    //   toast.error("Start time must be less than end time for all rows");
+      toast.error("Start time must be less than end time for all rows");
       return;
     }
 
-    // console.log('designationRows :>> ', designationRows);
-    // return;
     api
       .post("/designations", { designations: designationRows })
       .then((response) => {
         console.log("Designations updated:", response.data);
-        // toast.success("Designations updated successfully");
+        toast.success("Designations updated successfully");
       })
       .catch((error) => {
         console.error("Error updating designations:", error);
-        // toast.error("Error updating designations");
+        toast.error("Error updating designations");
       });
   };
 
@@ -118,7 +117,7 @@ const StaffSetup = () => {
           "Cannot delete initial designation:",
           initialDesignation.designation_name
         );
-        // toast.error("Cannot delete initial designation");
+        toast.error("Cannot delete initial designation");
         return;
       }
       const updatedRows = designationRows.filter(
@@ -145,7 +144,7 @@ const StaffSetup = () => {
       (row) => row.entry_time < row.exit_time
     );
     if (!isValid) {
-    //   toast.error("Start time must be less than end time for all rows");
+      toast.error("Start time must be less than end time for all rows");
       return;
     }
     setOpenWarning(true);
@@ -163,7 +162,6 @@ const StaffSetup = () => {
   return (
     <div className="new">
       <div className="newContainer">
-        {/* <ToastContainer /> */}
         <Dialog open={openWarning} onClose={handleCloseWarning}>
           <DialogTitle>Warning</DialogTitle>
           <DialogContent>

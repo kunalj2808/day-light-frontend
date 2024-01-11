@@ -13,7 +13,7 @@ body {
   padding: 0 0 30px 0;
   background-color: #fafafa;
   letter-spacing: -0.3px;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(251, 65, 65, 0.65);
   font-size: 14px;
   line-height: 1.6;
   font-weight: 400;
@@ -1596,9 +1596,21 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
 .ant-employed {
   display: flex;
   align-items: center;
+  text-decoration: none;
   justify-content: space-between;
-  font-weight: 500;
+  font-weight: 600;
   color: #8c8c8c;
+}
+.column-header {
+  display: flex;
+  
+  justify-content: space-between;
+  font-weight: 1000;
+  color: #8c8c8c;
+}
+
+.ant-table-cell {
+  text-align: left;
 }
 
 .ant-employed a {
