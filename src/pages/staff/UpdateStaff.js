@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+
 import {
     FormControl,
     InputLabel,
@@ -14,7 +16,8 @@ import {
 import "./style/create.scss";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import axios from "axios";
-import {  toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { tokens } from "../../theme";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
@@ -24,68 +27,74 @@ import UploadPopup from '../../components/UploadPopup';
 import { useAuth } from "../../providers/AuthProvider";
 import AuthAxios from '../../config/AuthAxios';
 
+import { API_BASE_URL, STUDENTS_API, MEDIUMS_API, STANDARDS_API, BASE_URL } from "../../config/constants";
 
-const CreateStudentForm = () => {
+const UpdateStaff = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [departments, setDepartments] = useState([]);
-    const [designation, setDesignation] = useState([]);
-    //const [selectedDesignation, setSelectedDesignation] = useState(null);
+    const [thumbnail, setThumbnail] = useState(null);
+
     const [isPopupOpen, setPopupOpen] = useState(false);
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
     const maritalStatus = ['Single', 'Married', 'Divorced', 'Widowed', 'Other']
-
+    const { id } = useParams();
     const { userToken } = useAuth();
     const api = AuthAxios(userToken);
 
 
     useEffect(() => {
-        // Fetch data from an API using Axios
+        api
+            .get('staffs/' + id)
+            .then(response => {
+                const data = response.data;
+                setUserData({
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    dob: data.dob,
+                    joining_date: data.joining_date,
+                    employee_id:data.employee_id,
+                    marital_status:data.marital_status,
+                    aadhar_no: data.aadhar_no,
+                    mobile_no: data.mobile_no,
+                    email: data.email,
+                    blood_group: data.blood_group,
+                    emergency_contact: data.emergency_contact,
+                    department_id: data.department_id,
+                    r_address: data.r_address,
+                    r_city: data.r_city,
+                    r_state: data.r_state,
+                    r_pincode: data.r_pincode,
+                    p_address: data.p_address,
+                    p_city: data.p_city,
+                    p_state: data.p_state,
+                    p_pincode: data.p_pincode,
+                    bank_name: data.bank_name,
+                    bank_branch: data.bank_branch,
+                    bank_ifsc: data.bank_ifsc,
+                    acc_no: data.acc_no,
+                    pf_no: data.pf_no,
+                  });
+
+                  setThumbnail(data.staff_image_thumbnail);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
         api
             .get('departments')
             .then(response => {
-                const data = response.data.data;
+                const data = response.data;
                 setDepartments(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
+
     }, []);
 
-
-    const handleBulkUpload = async (file) => {
-        // Implement your file upload logic here
-        console.log('Uploading file:', file);
-        try {
-
-            const formData = new FormData();
-
-            if (file) {
-                formData.append("excel_sheet", file);
-            }
-
-            // Make an HTTP POST request to the backend API to create the user
-            const response = await api.post('upload-student-excel',
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-
-            // The created user data will be available in the response object
-            console.log("Upload Succesful:", response.data);
-
-            toast("User created Succesfully!")
-            return response.data;
-        } catch (error) {
-            // Handle errors if the request fails
-            console.error("Error uploading sheet:", error);
-            throw error;
-        }
-    };
 
     const [userData, setUserData] = useState({
         first_name: "",
@@ -101,7 +110,6 @@ const CreateStudentForm = () => {
         blood_group: "",
         emergency_contact: "",
         department_id: "",
-        designation_id:"",
         r_address: "",
         r_city: "",
         r_state: "",
@@ -114,11 +122,8 @@ const CreateStudentForm = () => {
         bank_branch: "",
         bank_ifsc: "",
         acc_no: "",
-        pf_no: "",
-        pan_number: "",
-        basic_salary:"",
-      });
-      
+        pf_no: ""
+    });
 
     const createUser = async (userData) => {
         try {
@@ -136,8 +141,8 @@ const CreateStudentForm = () => {
             }
 
             // Make an HTTP POST request to the backend API to create the user
-            const response = await api.post(
-                'staffs',
+            const response = await api.put(
+                'staffs/'+ id, 
                 formData,
                 {
                     headers: {
@@ -147,12 +152,12 @@ const CreateStudentForm = () => {
             );
 
             // The created user data will be available in the response object
-            console.log("User created:", response.data);
-            toast("User created Succesfully!")
+            console.log("User updated:", response.data);
+            //toast("User created Succesfully!")
             return response.data;
         } catch (error) {
             // Handle errors if the request fails
-            console.error("Error creating user:", error.response.data);
+            console.error("Error creating user:", error);
             throw error;
         }
     };
@@ -167,40 +172,22 @@ const CreateStudentForm = () => {
             // Handle the success case, e.g., show a success message
 
             refresh();
-            toast.success('User created successfully !', {
+            toast.success('User updated successfully !', {
                 position: toast.POSITION.TOP_RIGHT
             });
-            toast("User created successfully:", createdUser);
-            console.log("User created successfully:", createdUser);
+            //toast("User created successfully:", createdUser);
+            console.log("User updated successfully:", createdUser);
         } catch (error) {
-            toast.error('Error creating user ! \n' + error?.response?.data?.error, {
+            // Handle the error case, e.g., show an error message
+            toast.error('Error updated user !', {
                 position: toast.POSITION.TOP_CENTER
-              });
-              console.error("Error creating user:", error?.response?.data?.error);
+            });
+            console.error("Error updated user:", error);
         }
     };
 
-    const getDesignationByDepartments = (departmentId) => {
-        api
-        .get('designationbydepartment', {
-            params: {
-              departmentId: departmentId,
-            },
-          })
-        .then(response => {
-            const data = response.data;
-            setDesignation(data);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }
-
     const handleChange = (event) => {
         const { name, value } = event.target;
-        if(name === 'department_id'){
-            getDesignationByDepartments(value);
-        }
         setUserData((prevUserData) => ({
             ...prevUserData,
             [name]: value,
@@ -219,24 +206,29 @@ const CreateStudentForm = () => {
 
     return (
         <div className="new">
+            <div style={{ float: 'left' }}>
+            </div>
             <div className="newContainer">
-                <UploadPopup open={isPopupOpen} onClose={() => setPopupOpen(false)} onUpload={handleBulkUpload} />
+                <ToastContainer />
+               
+
                 <div className="bottom">
+
                     <Box
                         minHeight="100vh"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
-                        >
+                    // bgcolor="#e2e2e2"
+                    >
                         <form enctype="multipart/form-data" onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
                                     <div className="left">
                                         <img
                                             src={
-                                                selectedFile
-                                                    ? URL.createObjectURL(selectedFile)
-                                                    : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                                                selectedFile ? URL.createObjectURL(selectedFile)
+                                                    : thumbnail ? 'data:image/png;base64,' + thumbnail : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                                             }
                                             alt=""
                                         />
@@ -280,76 +272,17 @@ const CreateStudentForm = () => {
                                     <TextField fullWidth label="Last Name" variant="outlined" name="last_name" value={userData?.last_name} onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField fullWidth label="Employee ID" variant="outlined" name="employee_id" value={userData?.employee_id} onChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField fullWidth label="Aadhar No" variant="outlined" name="aadhar_no" value={userData?.aadhar_no} onChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField fullWidth label="Mobile No" variant="outlined" name="mobile_no" value={userData?.mobile_no} onChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField fullWidth label="Email" variant="outlined" name="email" value={userData?.email} onChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <FormControl fullWidth variant="outlined">
-                                        <InputLabel>Gender</InputLabel>
-                                        <Select label="Gender" name="gender" value={userData.gender} onChange={handleChange}>
-                                            <MenuItem value="Male">Male</MenuItem>
-                                            <MenuItem value="Female">Female</MenuItem>
-                                            <MenuItem value="Other">Other</MenuItem>
-                                            {/* Add more options as needed */}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={4}>
                                 <FormControl fullWidth variant="outlined">
-                                        <InputLabel>Marital Status</InputLabel>
-                                        <Select label="Marital Status" name="marital_status" value={userData?.marital_status} onChange={handleChange} >
-                                            <MenuItem disabled value="">Select Status</MenuItem>
-                                            {maritalStatus.map(item => (
-                                                <MenuItem key={item} value={item}>{item}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                  <InputLabel>Gender</InputLabel>
+                  <Select label="Gender" name="gender" value={userData.gender} onChange={handleChange}>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                    {/* Add more options as needed */}
+                  </Select>
+                </FormControl>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <FormControl fullWidth variant="outlined">
-                                        <InputLabel>Department</InputLabel>
-                                        <Select label="Department" name="department_id" value={userData?.department_id} onChange={handleChange} >
-                                            <MenuItem disabled value="">Select Department</MenuItem>
-                                            {departments.map(item => (
-                                                <MenuItem key={item.id} value={item.id}>{item.department_name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <FormControl fullWidth variant="outlined">
-                                        <InputLabel>Designation</InputLabel>
-                                        <Select label="Designation" name="designation_id" value={userData?.designation_id} onChange={handleChange} >
-                                            <MenuItem disabled value="">Select Department</MenuItem>
-                                            {designation.map(item => (
-                                                <MenuItem key={item.id} value={item.id}>{item.designation_name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField
-                                        fullWidth
-                                        label="Joining Date"
-                                        type="date"
-                                        variant="outlined"
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        name="joining_date"
-                                        value={userData?.joining_date}
-                                        onChange={handleChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={6}>
                                     <TextField
                                         fullWidth
                                         label="Date of Birth"
@@ -364,12 +297,61 @@ const CreateStudentForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Joining Date"
+                                        type="date"
+                                        variant="outlined"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        name="joining_date"
+                                        value={userData?.joining_date}
+                                        onChange={handleChange}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Employee ID" variant="outlined" name="employee_id" value={userData?.employee_id} onChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={4}>
+                                <FormControl fullWidth variant="outlined">
+                                        <InputLabel>Marital Status</InputLabel>
+                                        <Select label="Marital Status" name="marital_status" value={userData?.marital_status} onChange={handleChange} >
+                                            <MenuItem disabled value="">Select Status</MenuItem>
+                                            {maritalStatus.map(item => (
+                                                <MenuItem key={item} value={item}>{item}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Aadhar No" variant="outlined" name="aadhar_no" value={userData?.aadhar_no} onChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Mobile No" variant="outlined" name="mobile_no" value={userData?.mobile_no} onChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField fullWidth label="Email" variant="outlined" name="email" value={userData?.email} onChange={handleChange} />
+                                </Grid>
+                                <Grid item xs={4}>
                                     <TextField fullWidth label="Blood Group" variant="outlined" name="blood_group" value={userData?.blood_group} onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField fullWidth label="Emergency Contact" variant="outlined" name="emergency_contact" value={userData?.emergency_contact} onChange={handleChange} />
                                 </Grid>
-                               
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth variant="outlined">
+                                        <InputLabel>Department</InputLabel>
+                                        <Select label="Department" name="department_id" value={userData?.department_id} onChange={handleChange} >
+                                            <MenuItem disabled value="">Select Department</MenuItem>
+                                            {departments.map(item => (
+                                                <MenuItem key={item.id} value={item.id}>{item.department_name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -383,20 +365,12 @@ const CreateStudentForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <TextField fullWidth label="Basic Salary" variant="outlined" name="basic_salary" value={userData?.basic_salary} onChange={handleChange} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <TextField fullWidth label="PAN Number" variant="outlined" name="pan_number" value={userData?.pan_number} onChange={handleChange} />
-                                </Grid>
-
-
-                                <Grid item xs={4}>
                                     <TextField fullWidth label="Residential City" variant="outlined" name="r_city" value={userData?.r_city} onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <TextField fullWidth label="Residential State" variant="outlined" name="r_state" value={userData?.r_state} onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <TextField fullWidth label="Residential Pincode" variant="outlined" name="r_pincode" value={userData?.r_pincode} onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -429,19 +403,20 @@ const CreateStudentForm = () => {
                                 <Grid item xs={4}>
                                     <TextField fullWidth label="Bank IFSC" variant="outlined" name="bank_ifsc" value={userData?.bank_ifsc} onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <TextField fullWidth label="Account No" variant="outlined" name="acc_no" value={userData?.acc_no} onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <TextField fullWidth label="PF No" variant="outlined" name="pf_no" value={userData?.pf_no} onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button type="submit"  variant="contained" color="primary">
-                                        Create
+                                    <Button type="submit" fullWidth variant="contained" color="primary">
+                                        Update
                                     </Button>
                                 </Grid>
                             </Grid>
                         </form>
+
                     </Box>
                 </div>
             </div>
@@ -449,4 +424,4 @@ const CreateStudentForm = () => {
     );
 };
 
-export default CreateStudentForm;
+export default UpdateStaff;

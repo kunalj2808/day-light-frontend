@@ -1,14 +1,4 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
+
 
 // import { useState } from "react";
 import { Menu, Button } from "antd";
@@ -162,90 +152,24 @@ function Sidenav({ color }) {
 
   return (
     <>
-      <div className="brand" style={{color:'black'}}>
-        <NavLink to='/dashboard'><img src={logo} alt="" />
-        <span>F. R. A. M. S.</span>
+      <div className="brand" style={{ color: 'black' }}>
+        <NavLink to='/dashboard'>
+          <img src={logo} alt="" />
+          <span>F. R. A. M. S.</span>
         </NavLink>
       </div>
       <hr />
-      <Menu theme="light" mode="inline">
-        {/* <Menu.Item key="1">
-          <NavLink to="/dashboard">
-            <span
-              className="icon"
-              style={{
-                background: page === "dashboard" ? color : "",
-              }}
-            >
-              {dashboard}
-            </span>
-            <span className="label">Dashboard</span>
-          </NavLink>
-        </Menu.Item> */}
-        <Menu.Item className="menu-item-header" key="5">
-           Students
+      <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
+
+        <Menu.Item className="menu-item-header" key="1">
+          Staffs
         </Menu.Item>
         <Menu.Item key="2">
-          <NavLink to="/students">
-            <span
-              className="icon"
-              style={{
-                background: page === "tables" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Manage Students</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <NavLink to="/parents">
-            <span
-              className="icon"
-              style={{
-                background: page === "tables" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Parents Information</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <NavLink to="/studentleaves">
-            <span
-              className="icon"
-              style={{
-                background: page === "tables" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Manage Leaves</span>
-          </NavLink>
-        </Menu.Item>
-        {/* <Menu.Item key="5">
-          <NavLink to="/notification">
-            <span
-              className="icon"
-              style={{
-                background: page === "tables" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Notification</span>
-          </NavLink>
-        </Menu.Item> */}
-        <Menu.Item className="menu-item-header" key="5">
-           Staffs
-        </Menu.Item>
-        <Menu.Item key="6">
           <NavLink to="/ListStaffs">
             <span
               className="icon"
               style={{
-                background: page === "tables" ? color : "",
+                background: page === "ListStaffs" ? color : "",
               }}
             >
               {tables}
@@ -253,8 +177,8 @@ function Sidenav({ color }) {
             <span className="label">Manage Staff</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
-          <NavLink to="/staffleaves"> 
+        <Menu.Item key="3">
+          <NavLink to="/staffleaves">
             <span
               className="icon"
               style={{
@@ -266,23 +190,10 @@ function Sidenav({ color }) {
             <span className="label">Manage Staff Leaves</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
-           Settings
+        <Menu.Item className="menu-item-header" key="4">
+          Settings
         </Menu.Item>
-        <Menu.Item key="8">
-          <NavLink to="/studentsetup">
-            <span
-              className="icon"
-              style={{
-                background: page === "rtl" ? color : "",
-              }}
-            >
-              {rtl}
-            </span>
-            <span className="label">School Setup</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="9">
+        <Menu.Item key="5">
           <NavLink to="/staffsetup">
             <span
               className="icon"
@@ -292,11 +203,23 @@ function Sidenav({ color }) {
             >
               {rtl}
             </span>
-            <span className="label"> Department Setup</span>
+            <span className="label">Designation Setup</span>
           </NavLink>
         </Menu.Item>
-       
-        <Menu.Item key="10">
+        <Menu.Item key="6">
+          <NavLink to="/departmentsetup">
+            <span
+              className="icon"
+              style={{
+                background: page === "departmentsetup" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Department Setup</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="7">
           <NavLink to="/SalarySetup">
             <span
               className="icon"
@@ -309,21 +232,15 @@ function Sidenav({ color }) {
             <span className="label">Salary Setup</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="11">
-        <NavLink to="https://daylightmanagement.in/contact.html" target="_blank" rel="noopener noreferrer">
-          <span className="icon">{signin}</span>
-          <span className="label">Help and Support</span>
-        </NavLink>
-      </Menu.Item>
-
-        {/* <Menu.Item key="8">
-          <NavLink to="/sign-up">
-            <span className="icon">{signup}</span>
-            <span className="label">Sign Up</span>
+        <Menu.Item key="8">
+          <NavLink to="https://daylightmanagement.in/contact.html" target="_blank" rel="noopener noreferrer">
+            <span className="icon">{signin}</span>
+            <span className="label">Help and Support</span>
           </NavLink>
-        </Menu.Item> */}
+        </Menu.Item>
+
       </Menu>
-    
+
     </>
   );
 }

@@ -13,7 +13,7 @@ import LineChart from "../components/chart/LineChart";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import profilavatar from "../../../src/assets/images/face-1.jpg";
-import { store } from 'react-notifications-component';
+import { store } from 'react-notifications-component';    
 import 'react-notifications-component/dist/theme.css';import {
   Dialog,
   DialogActions,
@@ -41,13 +41,14 @@ import {
 import Chart from "../../components/material/Chart";
 
 import {  toast } from "react-toastify";
-
+  
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import styled from "@emotion/styled";
+// import { usePDF } from "react-to-pdf";
 
 import {
   Box,
@@ -85,6 +86,7 @@ const ViewStudent = () => {
 
   const { userToken } = useAuth();
   const api = AuthAxios(userToken);
+  // const { toPDF, targetRef } = usePDF({ filename: "salaryslip.pdf" });
 
   // const { toPDF, targetRef } = usePDF({filename: 'salary.pdf'});
   const reportIcon = (
@@ -410,7 +412,6 @@ const ViewStudent = () => {
         <AddAttendancePopup />
         <DeleteAttendancePopup />
 
-        {/* <ReactNotifications /> */}
     
         <Row gutter={[24, 0]}>
        

@@ -107,7 +107,7 @@ const StaffLeaves = () => {
     api
       .get("departments")
       .then((standards) => {
-        setDepartments(standards.data);
+        setDepartments(standards.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -310,13 +310,13 @@ const StaffLeaves = () => {
   };
 
   const handleEventClick = (selected) => {
-    // if (
-    //   window.confirm(
-    //     `Are you sure you want to delete the attendance '${selected.event.title}'`
-    //   )
-    // ) {
-    //   selected.event.remove();
-    // }
+    if (
+      window.confirm(
+        `Are you sure you want to delete the attendance '${selected.event.title}'`
+      )
+    ) {
+      selected.event.remove();
+    }
   };
 
   const handleDepartmentChange = (event) => {

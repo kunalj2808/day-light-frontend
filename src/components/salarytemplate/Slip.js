@@ -187,7 +187,7 @@ const SalarySlip = ({ salaryDate,logo, user , employeeDetails, monthly, componen
                 <th >Current Month</th>
                 <td >{monthly?.date_span}</td>
                 <td >{totalLeaves}</td>
-                <td colspan="4" className='amount-align'>Authorized Signature</td>
+                <td colSpan="4" className='amount-align'>Authorized Signature</td>
               </tr >
  
             </tbody>

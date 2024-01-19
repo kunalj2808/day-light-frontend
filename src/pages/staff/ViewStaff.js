@@ -7,12 +7,11 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import Chart from "../../components/material/Chart";
+// import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+// import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+// import Chart from "../../components/material/Chart";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-// import { usePDF } from "react-to-pdf";
 
 import {
   Dialog,
@@ -75,24 +74,23 @@ const ViewStaff = () => {
   const { userToken } = useAuth();
   const api = AuthAxios(userToken);
   // const { toPDF, targetRef } = usePDF({ filename: "salaryslip.pdf" });
-  const deletebtn = [
+  const reportIcon = (
     <svg
       width="16"
       height="16"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1}
     >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M9 2C8.62123 2 8.27497 2.214 8.10557 2.55279L7.38197 4H4C3.44772 4 3 4.44772 3 5C3 5.55228 3.44772 6 4 6L4 16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V6C16.5523 6 17 5.55228 17 5C17 4.44772 16.5523 4 16 4H12.618L11.8944 2.55279C11.725 2.214 11.3788 2 11 2H9ZM7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V8ZM12 7C11.4477 7 11 7.44772 11 8V14C11 14.5523 11.4477 15 12 15C12.5523 15 13 14.5523 13 14V8C13 7.44772 12.5523 7 12 7Z"
+        d="M15 18H5C3.89543 18 3 17.1046 3 16V4C3 2.89543 3.89543 2 5 2H15C16.1046 2 17 2.89543 17 4V16C17 17.1046 16.1046 18 15 18ZM5 0C2.23858 0 0 2.23858 0 5V16C0 18.7614 2.23858 21 5 21H15C17.7614 21 20 18.7614 20 16V5C20 2.23858 17.7614 0 15 0H5ZM10 15C10.5523 15 11 14.5523 11 14V8C11 7.44772 10.5523 7 10 7C9.44772 7 9 7.44772 9 8V14C9 14.5523 9.44772 15 10 15ZM10 5C10.5523 5 11 4.55228 11 4C11 3.44772 10.5523 3 10 3C9.44772 3 9 3.44772 9 4C9 4.55228 9.44772 5 10 5Z"
         fill="#111827"
-        className="fill-danger"
-      ></path>
-    </svg>,
-  ];
+      />
+    </svg>
+  );
   const pencil = [
     <svg
       width="20"
@@ -441,15 +439,14 @@ const ViewStaff = () => {
         <AddAttendancePopup />
         <DeleteAttendancePopup />
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
-            <Card bordered={false} className="criclebox h-full">
+          <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24 ">
+            <Card bordered={true} className="criclebox h-full">
               <Row gutter={[24, 0]}>
                 <Col
                   xs={24}
                   sm={24}
-                  md={12}
-                  lg={12}
-                  xl={14}
+                  md={24}
+                  lg={24}
                   className="mb-24"
                   style={{ display: "flex", alignItems: "center" }}
                 >
@@ -516,112 +513,102 @@ const ViewStaff = () => {
                 <Button type="link" href={"update/" + id}>
                   {pencil} EDIT
                 </Button>
-                <Button className="infoButton" type="link">
-                  {deletebtn} Report
+                <Button className="infoButton"  href={"salaryslip/" + id} type="link">
+                  {reportIcon} Salary Slip
                 </Button>
               </div>
             </Card>
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24">
-            <Card bordered={false} className="criclebox h-full">
+            <Card bordered={true} className="criclebox h-full">
               <LineChart data={staffsSessionData} />
             </Card>
           </Col>
         </Row>
-        <div className="bottom">
-          <Box m="20px">
-            <Box display="flex" justifyContent="space-between">
-              <Box flex="1 1 15%">
-                <div className="featured">
-                  <div className="top">
-                    <p className="title">Average Attendance</p>
-                  </div>
-
-                  <div className="feature-bottom">
-                    <h2 className="desc">Monthly</h2>
-                    <div className="featuredChart">
-                      {" "}
-                      <CircularProgressbar
-                        value={monthlyData?.staff_percentage}
-                        text={
-                          parseFloat(monthlyData?.staff_percentage)
-                            ?.toFixed(2)
-                            ?.toString() + "%"
-                        }
-                        strokeWidth={5}
-                      />{" "}
-                    </div>
-                    <p className="title">Attendance</p>
-                    <p className="amount">{monthlyData?.total_attendance}</p>
-
-                    <h2 className="desc">Anually</h2>
-                    <div className="featuredChart">
-                      {" "}
-                      <CircularProgressbar
-                        value={staffPercentageData?.staff_percentage}
-                        text={
-                          parseFloat(staffPercentageData?.staff_percentage)
-                            ?.toFixed(2)
-                            ?.toString() + "%"
-                        }
-                        strokeWidth={5}
-                      />{" "}
-                    </div>
-                    <p className="title">Attendance</p>
-                    <p className="amount">
-                      {staffPercentageData?.total_attendance}
-                    </p>
-                  </div>
+        <div className="bottom">  
+        <Box m="5px">    
+          <Box display="flex" justifyContent="space-between">
+            {/* Featured Card */}
+            <Box flex="1 1 15%">
+              <div className="featured">
+                <div className="">
+                  <p className="title">Average Attendance</p>
                 </div>
-              </Box>
+                <div className="feature-bottom">
+                  <h2 className="desc">Monthly</h2>
+                  <div className="featuredChart">
+                    <CircularProgressbar
+                      value={monthlyData?.staff_percentage}
+                      text={
+                        parseFloat(monthlyData?.staff_percentage)
+                          ?.toFixed(2)
+                          ?.toString() + "%"
+                      }
+                      strokeWidth={5}
+                    />
+                  </div>
+                  <p className="title">
+                    Attendance: &nbsp;<b>{monthlyData?.total_attendance}</b>
+                  </p>
+                  <h2 className="desc">Annually</h2>
+                  <div className="featuredChart">
+                    <CircularProgressbar
+                      value={staffPercentageData?.staff_percentage}
+                      text={
+                        parseFloat(staffPercentageData?.staff_percentage)
+                          ?.toFixed(2)
+                          ?.toString() + "%"
+                      }
+                      strokeWidth={5}
+                    />
+                  </div>
+                  <p className="title">
+                    Attendance <b>{staffPercentageData?.total_attendance}</b>
+                  </p>
+                </div>
+              </div>
+            </Box>
 
-              {/* CALENDAR */}
-              <Box flex="1 1 85%" ml="4vh">
-                <FullCalendar
-                  ref={calendarRef}
-                  height="75vh"
-                  plugins={[
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    listPlugin,
-                  ]}
-                  headerToolbar={{
-                    left: "prev,next today",
-                    center: "title",
-                    right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-                  }}
-                  initialView="dayGridMonth"
-                  // events={[{
-                  //       id: "12344",
-                  //       title: "Hello",
-                  //       start: "2022-07-28",
-                  //       end: "2022-07-28",
-                  //       allDay: true,
-                  //     }]}
-
-                  editable={true}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  select={handleDateClick}
-                  eventClick={handleEventClick}
-                  validRange={{ start: startSessionDate, end: endSessionDate }}
-                  eventsSet={(events) => setCurrentEvents(events)}
-                  initialEvents={[
-                    {
-                      id: "12344",
-                      title: "Hello",
-                      start: "2022-07-28",
-                      end: "2022-07-28",
-                      allDay: true,
-                    },
-                  ]}
-                />
-              </Box>
+            <Box flex="1 1 75%" ml="2vh">
+              <FullCalendar
+                ref={calendarRef}
+                height="75vh"
+                plugins={[
+                  dayGridPlugin,
+                  timeGridPlugin,
+                  interactionPlugin,
+                  listPlugin,
+                ]}
+                headerToolbar={{
+                  left: "prev",
+                  center: "title",
+                  right: "next today dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+                }}
+                
+                initialView="dayGridMonth"
+                editable={true}
+                selectable={true}
+                selectMirror={true}
+                dayMaxEvents={true}
+                select={handleDateClick}
+                eventClick={handleEventClick}
+                validRange={{ start: startSessionDate, end: endSessionDate }}
+                eventsSet={(events) => setCurrentEvents(events)}
+                initialEvents={[
+                  {
+                    id: "12344",
+                    title: "Hello",
+                    start: "2022-07-28",
+                    end: "2022-07-28",
+                    allDay: true,
+                  },
+                ]}
+              />
             </Box>
           </Box>
-        </div>
+        </Box>
+      </div>
+
       </div>
     </div>
   );

@@ -10,9 +10,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useAuth } from "../../providers/AuthProvider";
 import AuthAxios from '../../config/AuthAxios';
 import { useParams } from 'react-router-dom';
-
+  
 import Slip from '../../components/salarytemplate/Slip.js';
-// import { usePDF } from "react-to-pdf";
+import { usePDF } from "react-to-pdf";
 
 const SalarySlip = () => {
 
@@ -31,7 +31,7 @@ const SalarySlip = () => {
     const { id } = useParams();
 
     const fileName = "Salary_Slip_"+data?.first_name + "_" + data?.last_name +'_'+ data?.employee_id + "_"+ salaryDate?.toLocaleDateString(undefined,{ year: 'numeric', month: 'long' })?.trim()
-    // const { toPDF, targetRef } = usePDF({ filename: fileName });
+    const { toPDF, targetRef } = usePDF({ filename: fileName });
 
     useEffect(() => {
         api
@@ -142,14 +142,14 @@ const SalarySlip = () => {
                                 Calculate Salary
                             </Button>
                         </Box>
-                        <Box m={2} >
+                        <Box m={2} ref={targetRef}>
                             <Slip salaryDate = {salaryDate} logo = {logo} user = {userObject} employeeDetails={data} monthly={monthlyData} components = {salaryComponents} basicSalary = {basicSalary}/>
                         </Box>
                         <Box m={2} >
                             <Button
                                 variant="contained"
                                 color="warning"
-                                
+                                onClick={() => toPDF()}
                             >
                                 Download Salary Slip
                             </Button>

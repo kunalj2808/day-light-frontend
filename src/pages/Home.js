@@ -9,7 +9,7 @@
   =========================================================
   * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Card,
@@ -24,7 +24,7 @@ import {
   Button,
   Timeline,
   Radio,
-  Table
+  Table,
 } from "antd";
 import ava1 from "../assets/images/logo-shopify.svg";
 import ava2 from "../assets/images/logo-atlassian.svg";
@@ -45,11 +45,10 @@ import AuthAxios from "../config/AuthAxios";
 function Home() {
   const { Title, Text } = Typography;
 
-  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
 
   const [reverse, setReverse] = useState(false);
-   
-  const dollor = [  
+
+  const dollor = [
     <svg
       width="22"
       height="22"
@@ -145,16 +144,16 @@ function Home() {
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Jessica Doe">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
@@ -167,10 +166,10 @@ function Home() {
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
@@ -183,29 +182,29 @@ function Home() {
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
     },
     {
-      img: '',
+      img: "",
       Title: "Launch new Mobile App",
       bud: "$20,600",
       progress: <Progress percent={100} size="small" status="active" />,
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
@@ -218,16 +217,16 @@ function Home() {
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Jessica Doe">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
@@ -248,10 +247,10 @@ function Home() {
       member: (
         <div className="avatar-group mt-2">
           <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
           <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={''} alt="" />
+            <img className="tootip-img" src={""} alt="" />
           </Tooltip>
         </div>
       ),
@@ -288,32 +287,17 @@ function Home() {
     },
   ];
 
-  const uploadProps = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+
 
   const [topData, setTopData] = useState([]);
   const [bottomData, setBottomData] = useState([]);
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalStaffs, setTotalStaffs] = useState(0);
-  
-    const [todayStudent, setTodayStudent] = useState(0);
-    const [todayStaff, setTodayStaff] = useState(0);
-    const [arrayCount,setArrayCount] = useState([]);
+  const [totalDepartments, setTotalDepartments] = useState(0);
+
+  const [todayStudent, setTodayStudent] = useState(0);
+  const [todayStaff, setTodayStaff] = useState(0);
+  const [arrayCount, setArrayCount] = useState([]);
 
   const [staffOverall, setStaffOverall] = useState(null);
   const [studentOverall, setStudentOverall] = useState(null);
@@ -321,188 +305,209 @@ function Home() {
   const [staffSessions, setStaffSession] = useState(null);
   const [studentSessions, setStudentSession] = useState([]);
 
-
   const [studentLimit, setStudentLimit] = useState(5);
 
   const { userToken } = useAuth();
   const api = AuthAxios(userToken);
-// table code start
-const columns = [
-  {
-    title: <h3 className="column-header">NAME</h3>,
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: <h3 className="column-header">STANDARD</h3>,
-    dataIndex: "Standard",
-    key: "Standard",
-  },
-  {
-    title: <h3 className="column-header">MEDIUM</h3>,
-    key: "Medium",
-    dataIndex: "Medium",
-  },
-  {
-    title: <h3 className="column-header">PARENTS NAME</h3>,
-    key: "parent",
-    dataIndex: "parent",
-  },
-  {
-    title: <h3 className="column-header">PARENTS PHONE</h3>,
-    key: "parentphone",
-    dataIndex: "parentphone",
-  },
-  {
-    title: <h3 className="column-header">ATTENDENCE</h3>,
-    key: "attendance",
-    dataIndex: "attendance",
-  },
-  {
-    title: <h3 className="column-header">PERCENTAGE</h3>,
-    key: "Percentage",
-    dataIndex: "Percentage",
-  },
-];
+  // table code start
+  const columns = [
+    {
+      title: <h3 className="column-header">NAME</h3>,
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: <h3 className="column-header">STANDARD</h3>,
+      dataIndex: "Standard",
+      key: "Standard",
+    },
+    {
+      title: <h3 className="column-header">MEDIUM</h3>,
+      key: "Medium",
+      dataIndex: "Medium",
+    },
+    {
+      title: <h3 className="column-header">PARENTS NAME</h3>,
+      key: "parent",
+      dataIndex: "parent",
+    },
+    {
+      title: <h3 className="column-header">PARENTS PHONE</h3>,
+      key: "parentphone",
+      dataIndex: "parentphone",
+    },
+    {
+      title: <h3 className="column-header">ATTENDENCE</h3>,
+      key: "attendance",
+      dataIndex: "attendance",
+    },
+    {
+      title: <h3 className="column-header">PERCENTAGE</h3>,
+      key: "Percentage",
+      dataIndex: "Percentage",
+    },
+  ];
 
-
-
-const Topdatas = topData.map((data, index) => ({
-  key: index.toString(),
-  name: (
-    <>
-     
+  const Topdatas = topData.map((data, index) => ({
+    key: index.toString(),
+    name: (
+      <>
         <div className="avatar-info">
-        <b><span >{data.first_name}&nbsp;{data.last_name}</span></b>
+          <b>
+            <span>
+              {data.first_name}&nbsp;{data.last_name}
+            </span>
+          </b>
         </div>
-    </>
-  ),
+      </>
+    ),
 
-  Standard: (
-    <>
-      <div className="ant-employed">
+    Standard: (
+      <>
+        <div className="ant-employed">
           <span>{data.class.class_name}</span>
         </div>
-    </>
-  ),
-  Medium: (
-    <>
-      <div className="ant-employed">
-        <span>{data.medium.type}</span>
-      </div>
-    </>
-  ),
-  parent: (
-    <>
-      <div className="ant-employed">
-        <span>{data.parent_name}</span>
-      </div>
-    </>
-  ),
-  parentphone: (
-    <>
-      <div className="ant-employed">
-        <span>{data.parent_phone}</span>
-      </div>
-    </>
-  ),
-  attendence: (
-    <>
-      <div className="ant-employed">
-        <span>{data.total_attendance + '/' + ( parseInt(data?.date_span) - parseInt(data?.total_leaves))}</span>
-      </div>
-    </>
-  ),
-  Percentage: (
-    <>
-      <div className="ant-employed">
-        <span>{data?.student_percentage
-                  ? parseFloat(data.student_percentage).toFixed(2) + '%'
-                  : ""}</span>
-      </div>
-    </>
-  ),
-}));
-const bottomdatas = bottomData.map((data, index) => ({
-  key: index.toString(),
-  name: (
-    <>
-     
-     <div className="avatar-info">
-          <b><span >{data.first_name}&nbsp;{data.last_name}</span></b>
+      </>
+    ),
+    Medium: (
+      <>
+        <div className="ant-employed">
+          <span>{data.medium.type}</span>
         </div>
-    </>
-  ),
+      </>
+    ),
+    parent: (
+      <>
+        <div className="ant-employed">
+          <span>{data.parent_name}</span>
+        </div>
+      </>
+    ),
+    parentphone: (
+      <>
+        <div className="ant-employed">
+          <span>{data.parent_phone}</span>
+        </div>
+      </>
+    ),
+    attendence: (
+      <>
+        <div className="ant-employed">
+          <span>
+            {data.total_attendance +
+              "/" +
+              (parseInt(data?.date_span) - parseInt(data?.total_leaves))}
+          </span>
+        </div>
+      </>
+    ),
+    Percentage: (
+      <>
+        <div className="ant-employed">
+          <span>
+            {data?.student_percentage
+              ? parseFloat(data.student_percentage).toFixed(2) + "%"
+              : ""}
+          </span>
+        </div>
+      </>
+    ),
+  }));
+  const bottomdatas = bottomData.map((data, index) => ({
+    key: index.toString(),
+    name: (
+      <>
+        <div className="avatar-info">
+          <b>
+            <span>
+              {data.first_name}&nbsp;{data.last_name}
+            </span>
+          </b>
+        </div>
+      </>
+    ),
 
-  Standard: (
-    <>
-      <div className="ant-employed">
+    Standard: (
+      <>
+        <div className="ant-employed">
           <span>{data.class.class_name}</span>
         </div>
-    </>
-  ),
-  Medium: (
-    <>
-      <div className="ant-employed">
-        <span>{data.medium.type}</span>
-      </div>
-    </>
-  ),
-  parent: (
-    <>
-      <div className="ant-employed">
-        <span>{data.parent_name}</span>
-      </div>
-    </>
-  ),
-  parentphone: (
-    <>
-      <div className="ant-employed">
-        <span>{data.parent_phone}</span>
-      </div>
-    </>
-  ),
-  attendence: (
-    <>
-      <div className="ant-employed">
-        <span>{data.total_attendance + '/' + ( parseInt(data?.date_span) - parseInt(data?.total_leaves))}</span>
-      </div>
-    </>
-  ),
-  Percentage: (
-    <>
-      <div className="ant-employed">
-        <span>{data?.student_percentage
-                  ? parseFloat(data.student_percentage).toFixed(2) + '%'
-                  : ""}</span>
-      </div>
-    </>
-  ),
-}));
+      </>
+    ),
+    Medium: (
+      <>
+        <div className="ant-employed">
+          <span>{data.medium.type}</span>
+        </div>
+      </>
+    ),
+    parent: (
+      <>
+        <div className="ant-employed">
+          <span>{data.parent_name}</span>
+        </div>
+      </>
+    ),
+    parentphone: (
+      <>
+        <div className="ant-employed">
+          <span>{data.parent_phone}</span>
+        </div>
+      </>
+    ),
+    attendence: (
+      <>
+        <div className="ant-employed">
+          <span>
+            {data.total_attendance +
+              "/" +
+              (parseInt(data?.date_span) - parseInt(data?.total_leaves))}
+          </span>
+        </div>
+      </>
+    ),
+    Percentage: (
+      <>
+        <div className="ant-employed">
+          <span>
+            {data?.student_percentage
+              ? parseFloat(data.student_percentage).toFixed(2) + "%"
+              : ""}
+          </span>
+        </div>
+      </>
+    ),
+  }));
 
-// Now 'datas' contains the transformed data based on 'topData' with keys using the map function.
-
+  // Now 'datas' contains the transformed data based on 'topData' with keys using the map function.
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const students = await api.get("getstudentscount/", {});
         setTotalStudents(students.data.studentCount);
-  
+
         const staffs = await api.get("getstaffscount/", {});
         setTotalStaffs(staffs.data.staffCount);
-  
-        const todayStudentAttendance = await api.get("todaystudentattendance/", {});
+
+        const departments = await api.get("departments", {});
+        console.log('departments :>> ', departments);
+        setTotalDepartments(departments.data.count);
+
+        const todayStudentAttendance = await api.get(
+          "todaystudentattendance/",
+          {}
+        );
         setTodayStudent(todayStudentAttendance.data.count);
-  
+
         const todayStaffAttendance = await api.get("todaystaffattendance/", {});
         setTodayStaff(todayStaffAttendance.data.count);
-        
+
         // Set the count array once all data is fetched and state is updated
         const count = [
           {
-            today: "Total Students",
-            title: students.data.studentCount,
+            today: "Total Departments",
+            title: totalDepartments,
             persent: "",
             icon: profile,
             bnb: "bnb2",
@@ -515,13 +520,6 @@ const bottomdatas = bottomData.map((data, index) => ({
             bnb: "bnb2",
           },
           {
-            today: "Students Present Today",
-            title: todayStudentAttendance.data.count,
-            persent: "",
-            icon: profile,
-            bnb: "redtext",
-          },
-          {
             today: "Staffs Present Today",
             title: todayStaffAttendance.data.count,
             persent: "",
@@ -532,73 +530,78 @@ const bottomdatas = bottomData.map((data, index) => ({
         setArrayCount(count);
 
         await api
-        .get("studentssessionpercentage/", {})
-        .then(async (students) => {
-          console.log(students.data);
-          let data = students?.data;
-          let chartData = await Promise.all(data.map((value, i) => {
-            return { name: value.monthName, Total: parseFloat(value.overallAveragePercentage).toFixed(2)}
-          }));
-          setStudentSession(chartData);
-        })
-  
-        .catch((error) => {
-          console.error("Error", error);
-          console.error("Error fetching data:", error?.response?.data);
-        });
+          .get("studentssessionpercentage/", {})
+          .then(async (students) => {
+            let data = students?.data;
+            let chartData = await Promise.all(
+              data.map((value, i) => {
+                return {
+                  name: value.monthName,
+                  Total: parseFloat(value.overallAveragePercentage).toFixed(2),
+                };
+              })
+            );
+            setStudentSession(chartData);
+          })
+
+          .catch((error) => {
+            console.log("Error", error);
+            console.error("Error fetching data:", error?.response?.data);
+          });
         await api
-        .get("studentspercentage/", {
-          params: {
-            limit: studentLimit,
-            order: "top",
-          },
-        })
-        .then((students) => {
-          console.log('hellos',students.data);
-          setTopData(students.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error?.response?.data);
-        });
+          .get("studentspercentage/", {
+            params: {
+              limit: studentLimit,
+              order: "top",
+            },
+          })
+          .then((students) => {
+            setTopData(students.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error?.response?.data);
+          });
         await api
-        .get("studentspercentage/", {
-          params: {
-            limit: studentLimit,
-            order: "bottom",
-          },
-        })
-        .then((students) => {
-          setBottomData(students.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error?.response?.data);
-        });
-  
+          .get("studentspercentage/", {
+            params: {
+              limit: studentLimit,
+              order: "bottom",
+            },
+          })
+          .then((students) => {
+            setBottomData(students.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error?.response?.data);
+          });
       } catch (error) {
         console.error("Error fetching data:", error?.response?.data);
       }
     };
-  
+
     fetchData();
   }, []);
-  
-  
+
   return (
     <>
       <div className="layout-content">
         <Row className="rowgap-vbox" gutter={[24, 0]}>
           {arrayCount.map((c, index) => (
-            <Col
-              key={index}
-              xs={24}
-              sm={24}
-              md={12}
-              lg={6}
-              xl={6}
-              className="mb-24" 
-            >
-              <Card bordered={false} className="criclebox" style={{ padding: 0, height: '90px',  marginTop:-10}}>
-                <div className="number" style={{marginTop:-12}}>
+           <Col
+           key={index}
+           xs={24}
+           sm={24}
+           md={8}
+           lg={8}
+           xl={8}
+           className="mb-24"
+         >
+              <Card
+                bordered={false}
+                className="criclebox"
+                style={{ padding: 0, height: "90px", marginTop: -10 }}
+              >
+                <div className="number" style={{ marginTop: -12 }}>
                   <Row align="middle" gutter={[, 0]}>
                     <Col xs={19}>
                       <span>{c.today}</span>
@@ -617,227 +620,17 @@ const bottomdatas = bottomData.map((data, index) => ({
         </Row>
 
         <Row gutter={[24, 0]}>
-     
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
-  <Card bordered={false} className="criclebox h-full">
-    {studentSessions.length > 0 && (
-      <LineChart data={studentSessions} title="This Session (Attendance)" />
-    )}
-  </Card>
-</Col>
-
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} className="mb-24">
-          <Card
-              bordered={false}
-              className="criclebox tablespace mb-24"
-              title="Top 5 Students"
-              extra={
-                <>
-                 
-                </>
-              }
-            >
-              <div className="table-responsive">
-                <Table style={{textAlign:"left" }}
-                  columns={columns}
-                  dataSource={Topdatas}
-                  pagination={false}
-                  className="ant-border-space"
+          <Col xs={24} sm={24} md={24} lg={24} xl={24} className="mb-24">
+            <Card bordered={false} className="criclebox h-full">
+              {studentSessions.length > 0 && (
+                <LineChart
+                  data={studentSessions}
+                  title="This Session (Attendance)"
                 />
-              </div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} className="mb-24">
-          <Card
-              bordered={false}
-              className="criclebox tablespace mb-24"
-              title="Bottom 5 Students"
-              extra={
-                <>
-                 
-                </>
-              }
-            >
-              <div className="table-responsive">
-                <Table
-                  columns={columns}
-                  dataSource={bottomdatas}
-                  pagination={false}
-                  className="ant-border-space"
-                />
-              </div>
+              )}
             </Card>
           </Col>
         </Row>
-        {/* <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">
-            <Card bordered={false} className="criclebox cardbody h-full">
-              <div className="project-ant">
-                <div>
-                  <Title level={5}>Projects</Title>
-                  <Paragraph className="lastweek">
-                    done this month<span className="blue">40%</span>
-                  </Paragraph>
-                </div>
-                <div className="ant-filtertabs">
-                  <div className="antd-pro-pages-dashboard-analysis-style-salesExtra">
-                    <Radio.Group onChange={onChange} defaultValue="a">
-                      <Radio.Button value="a">ALL</Radio.Button>
-                      <Radio.Button value="b">ONLINE</Radio.Button>
-                      <Radio.Button value="c">STORES</Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-              </div>
-              <div className="ant-list-box table-responsive">
-                <table className="width-100">
-                  <thead>
-                    <tr>
-                      <th>COMPANIES</th>
-                      <th>MEMBERS</th>
-                      <th>BUDGET</th>
-                      <th>COMPLETION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {list.map((d, index) => (
-                      <tr key={index}>
-                        <td>
-                          <h6>
-                            <img
-                              src={d.img}
-                              alt=""
-                              className="avatar-sm mr-10"
-                            />{" "}
-                            {d.Title}
-                          </h6>
-                        </td>
-                        <td>{d.member}</td>
-                        <td>
-                          <span className="text-xs font-weight-bold">
-                            {d.bud}{" "}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="percent-progress">{d.progress}</div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="uploadfile shadow-none">
-                <Upload {...uploadProps}>
-                  <Button
-                    type="dashed"
-                    className="ant-full-box"
-                    icon={<ToTopOutlined />}
-                  >
-                    <span className="click">Click to Upload</span>
-                  </Button>
-                </Upload>
-              </div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={12} xl={8} className="mb-24">
-            <Card bordered={false} className="criclebox h-full">
-              <div className="timeline-box">
-                <Title level={5}>Orders History</Title>
-                <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                  this month <span className="bnb2">20%</span>
-                </Paragraph>
-
-                <Timeline
-                  pending="Recording..."
-                  className="timelinelist"
-                  reverse={reverse}
-                >
-                  {timelineList.map((t, index) => (
-                    <Timeline.Item color={t.color} key={index}>
-                      <Title level={5}>{t.title}</Title>
-                      <Text>{t.time}</Text>
-                    </Timeline.Item>
-                  ))}
-                </Timeline>
-                <Button
-                  type="primary"
-                  className="width-100"
-                  onClick={() => setReverse(!reverse)}
-                >
-                  {<MenuUnfoldOutlined />} REVERSE
-                </Button>
-              </div>
-            </Card>
-          </Col>
-        </Row> */}
-
-        {/* <Row gutter={[24, 0]}>
-          <Col xs={24} md={12} sm={24} lg={12} xl={14} className="mb-24">
-            <Card bordered={false} className="criclebox h-full">
-              <Row gutter>
-                <Col
-                  xs={24}
-                  md={12}
-                  sm={24}
-                  lg={12}
-                  xl={14}
-                  className="mobile-24"
-                >
-                  <div className="h-full col-content p-20">
-                    <div className="ant-muse">
-                      <Text>Built by developers</Text>
-                      <Title level={5}>Muse Dashboard for Ant Design</Title>
-                      <Paragraph className="lastweek mb-36">
-                        From colors, cards, typography to complex elements, you
-                        will find the full documentation.
-                      </Paragraph>
-                    </div>
-                    <div className="card-footer">
-                      <a className="icon-move-right" href="#pablo">
-                        Read More
-                        {<RightOutlined />}
-                      </a>
-                    </div>
-                  </div>
-                </Col>
-                <Col
-                  xs={24}
-                  md={12}
-                  sm={24}
-                  lg={12}
-                  xl={10}
-                  className="col-img"
-                >
-                  <div className="ant-cret text-right">
-                    <img src={''} alt="" className="border10" />
-                  </div>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-
-          <Col xs={24} md={12} sm={24} lg={12} xl={10} className="mb-24">
-            <Card bordered={false} className="criclebox card-info-2 h-full">
-              <div className="gradent h-full col-content">
-                <div className="card-content">
-                  <Title level={5}>Work with the best</Title>
-                  <p>
-                    Wealth creation is an evolutionarily recent positive-sum
-                    game. It is all about who take the opportunity first.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <a className="icon-move-right" href="#pablo">
-                    Read More
-                    <RightOutlined />
-                  </a>
-                </div>
-              </div>
-            </Card>
-          </Col>
-        </Row> */}
       </div>
     </>
   );

@@ -10,11 +10,8 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { tokens } from '../../theme';
 import { alpha, styled } from '@mui/material/styles';
-import DownloadingIcon from '@mui/icons-material/Downloading';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import FilePresentIcon from '@mui/icons-material/FilePresent';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import { toast  } from 'react-toastify';
@@ -44,14 +41,11 @@ const ListStaffs = () => {
   const [data, setData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
-  const [dataRow , setDataRow]= useState([]);
 
   const [departmentValue, setDepartmentValue] = useState(null);
   const [designationValue, setDesignationValue] = useState(null);
 
-  const [filteredRows, setFilteredRows] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [filterValue, setFilterValue] = useState('');
 
   const [selectedValue, setSelectedValue] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -143,7 +137,8 @@ const ListStaffs = () => {
       align: 'center',
       width: 200,
       renderCell: (params) => {
-        var link = "/staff/" + params.row.ids;
+        var link = "/staff/" + params.row.id;
+        console.log('link :>> ', link);
         return (
           <div className="cellAction">
             <Button 
@@ -248,87 +243,12 @@ const ListStaffs = () => {
     );
   }
   
-  // useEffect(() => {
-  //   console.log("Fetching staffs...");
-  //   api.get('staffs')
-  //     .then((staffs) => {
-  //       const currentData = staffs.data.map((staff, index) => ({
-  //         ids:staff.id,
-  //         id: index + 1,
-  //         first_name: staff.first_name,
-  //         last_name: staff.last_name,
-  //         employee_id: staff.employee_id,
-  //         mobile_no: staff.mobile_no,
-  //         email: staff.email,
-  //         department: staff.email,
-  //         designation: staff.email,
-  //         // standard: student?.class.class_name || "",
-  //         // medium: student.medium,
-  //         // parent_name: student.parent_name,
-  //         // parent_phone: student.parent_phone,
-  //       }));
-    
-  //       setLoading(false);
-    
-  //       // Use setTimeout if you need a delay before setting the state
-  //       setTimeout(() => {
-  //         setDataRow(currentData);
-  //         console.log("dataRow after mapping and setting state:", dataRow);
-  //       }, 10); 
-        
-        
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching staffs:', error);
-  //     });
-  
-  //   console.log("Fetching departments...");
-  //   api.get('departments')
-  //     .then((department) => {
-  //       console.log("Departments data:", department.data);
-  //       setDepartments(department.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching departments:', error);
-  //     });
-  
-  //   console.log("Fetching designations...");
-  //   api.get('designations')
-  //     .then((designation) => {
-  //       console.log("Designations data:", designation.data);
-  //       setDesignations(designation.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching designations:', error);
-  //     });
-  // }, []);
-  
  
-
-//   // Function to call the API and update class_id values
-//   const promoteStudents = async (studentIds) => {
-//     try {
-//       const response = await api.post('students/promote', { studentIds });
-//       console.log(response.data.message); // Output success message from the server
-//       setSelectedValue([])
-//       api.get('students').then((students) => {setData(students.data)}).catch((error) => {console.error('Error fetching data:', error);});
-//       dataRef.current.refreshCells();
-//       toast.success('Students updated successfully!', {
-//         position: toast.POSITION.TOP_CENTER,
-//       });
-//     } catch (error) {
-//       console.error('Error updating class_id:', error);
-//       // Show error toast message
-//       toast.error('Error updating students!', {
-//         position: toast.POSITION.TOP_CENTER,
-//       });
-//     }
-//   };
 
 useEffect(() => {
 
   api.get('staffs').then((staffs) => {setData(staffs.data)}).catch((error) => {console.error('Error fetching data:', error);});
-  api.get('departments').then((department) => {setDepartments(department.data)}).catch((error) => {console.error('Error fetching data:', error);});
+  api.get('departments').then((department) => {setDepartments(department.data.data)}).catch((error) => {console.error('Error fetching data:', error);});
   api.get('designations').then((designation) => {setDesignations(designation.data)}).catch((error) => {console.error('Error fetching data:', error);});
 
 }, []);
@@ -475,28 +395,7 @@ useEffect(() => {
           >
             Delete
         </Button>
-        {/* <Button 
-          variant="contained"
-          disabled={selectedValue.length <= 0} 
-          color="warning"
-          
-          startIcon={<FilePresentIcon />}
-          sx={{ color: 'white', mr:2}} 
-          // onClick={() => salarystaffs(selectedValue)}
-          >
-            Salary Slips
-        </Button> */}
-        {/* <Button 
-          variant="contained"
-          disabled={selectedValue.length <= 0} 
-          color="warning"
-          
-          startIcon={<FilePresentIcon />}
-          sx={{ color: 'white', mr:2}} 
-          onClick={() => mine(selectedValue)}
-          >
-            Staff Report
-        </Button> */}
+      
         <Button
         variant="contained"
         color="primary"

@@ -1,11 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Button, Row, Col, Typography, Form, Input, Switch } from "antd";
-import { DribbbleOutlined, TwitterOutlined, InstagramOutlined, GithubOutlined } from "@ant-design/icons";
+import {
+  Layout,
+  Menu,
+  Button,
+  Row,
+  Col,
+  Typography,
+  Form,
+  Input,
+  Switch,
+} from "antd";
+import {
+  DribbbleOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
+  GithubOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "../../providers/AuthProvider"; // Import the useAuth hook
-import AuthAxios from '../../config/AuthAxios';
-import { useNavigate  } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import AuthAxios from "../../config/AuthAxios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
@@ -25,7 +40,7 @@ function SignIn() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("kunal",e);
+    console.log("kunal", e);
     e.preventDefault();
     setLoading(true);
 
@@ -50,13 +65,13 @@ function SignIn() {
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data.error, {
-        position: toast.POSITION.TOP_RIGHT
+        position: toast.POSITION.TOP_RIGHT,
       });
       console.log(error);
     }
   };
 
-  const onFinish = (values) => { 
+  const onFinish = (values) => {
     console.log("Success:", values);
   };
 
@@ -151,86 +166,86 @@ function SignIn() {
           <div className="header-col header-brand">
             <h5>Frams Day-Light</h5>
           </div>
-          <div className="header-col header-nav">
-          
-          </div>
-         
+          <div className="header-col header-nav"></div>
         </Header>
         <ToastContainer />
         <Content className="signin">
-        <div style={{ display: '', justifyContent: 'center', alignItems: 'center' }}>
-
-          <Row gutter={[24, 0]} justify="space-around">
-            <Col
-             xs={{ span: 24, offset: 0 }}
-             lg={{ span: 6, offset: 2 }}
-             md={{ span: 12 }}
-            >
-              <Title className="mb-15">Sign In</Title>
-              <Title className="font-regular text-muted" level={5}>
-                Enter your email and password to sign in
-              </Title>
-              <Form
-                onsubmit={handleSubmit}
-                layout="vertical"
-                className="row-col"
-              >
-                <Form.Item
-                  className="username"
-                  label="Email"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your email!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Email" value={username}
-               onChange={(e) => setUsername(e.target.value)} />
-                </Form.Item>
-
-                <Form.Item
-                  className="username"
-                  label="Password"
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your password!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Password" value={password}
-            onChange={(e) => setPassword(e.target.value)} />
-                </Form.Item>
-
-               
-
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{ width: "100%" }}
-                    loading={loading}
-          loadingPosition="start"
-          onClick={handleSubmit}
+          <div
+            style={{
+              display: "",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-                    SIGN IN
-                  </Button>
-                </Form.Item>
-              
-              </Form>
-            </Col>
-            
-          </Row>
+            <Row gutter={[24, 0]} justify="space-around">
+              <Col
+                xs={{ span: 24, offset: 0 }}
+                lg={{ span: 6, offset: 2 }}
+                md={{ span: 12 }}
+              >
+                <Title className="mb-15">Sign In</Title>
+                <Title className="font-regular text-muted" level={5}>
+                  Enter your email and password to sign in
+                </Title>
+                <Form
+                  onSubmit={handleSubmit}
+                  layout="vertical"
+                  className="row-col"
+                >
+                  <Form.Item
+                    className="username"
+                    label="Email"
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your email!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      placeholder="Email"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    className="username"
+                    label="Password"
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your password!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ width: "100%" }}
+                      loading={loading}
+                      loadingposition="start"
+                      onClick={handleSubmit}
+                    >
+                      SIGN IN
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Col>
+            </Row>
           </div>
-        </Content> 
-        <Footer style={{padding:"120px"}}>
-         
-      
-         
-        </Footer>
+        </Content>
+        <Footer style={{ padding: "120px" }}></Footer>
       </Layout>
     </>
   );
